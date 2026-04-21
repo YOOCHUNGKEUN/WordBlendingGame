@@ -1,5 +1,7 @@
 // lib/data/models/word_model.dart
 
+
+import '../../core/constants/app_strings.dart';
 import '../../domain/entities/word.dart';
 
 class WordModel extends Word {
@@ -13,21 +15,21 @@ class WordModel extends Word {
 
   factory WordModel.fromMap(Map<String, dynamic> map) {
     return WordModel(
-      id: map['id'] as String,
-      text: map['text'] as String,
-      emoji: map['emoji'] as String,
-      category: _parseCategory(map['category'] as String),
-      level: map['level'] as int? ?? 1,
+      id: map[AppStrings.id] as String,
+      text: map[AppStrings.text] as String,
+      emoji: map[AppStrings.emoji] as String,
+      category: _parseCategory(map[AppStrings.category] as String),
+      level: map[AppStrings.level] as int? ?? 1,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'text': text,
-      'emoji': emoji,
-      'category': category.name,
-      'level': level,
+      AppStrings.id: id,
+      AppStrings.text: text,
+      AppStrings.emoji: emoji,
+      AppStrings.category: category.name,
+      AppStrings.level: level,
     };
   }
 

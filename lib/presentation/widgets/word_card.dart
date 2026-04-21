@@ -1,6 +1,7 @@
 // lib/presentation/widgets/word_card.dart
 
 import 'package:flutter/material.dart';
+import '../../core/constants/app_colors.dart';
 import '../../domain/entities/word.dart';
 import '../../core/theme/app_theme.dart';
 
@@ -22,7 +23,7 @@ class WordCard extends StatelessWidget {
 
   Color get _bgColor {
     final categoryName = word.category.name;
-    return AppTheme.categoryColors[categoryName] ?? AppTheme.primaryLight;
+    return AppTheme.categoryColors[categoryName] ?? AppColors.primaryLight;
   }
 
   @override
@@ -38,7 +39,7 @@ class WordCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: isOnCanvas
-                ? AppTheme.primary.withOpacity(0.4)
+                ? AppColors.primary.withOpacity(0.4)
                 : Colors.white,
             width: isOnCanvas ? 2 : 1.5,
           ),
@@ -64,7 +65,7 @@ class WordCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
-                  color: AppTheme.textDark,
+                  color: AppColors.textDark,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,

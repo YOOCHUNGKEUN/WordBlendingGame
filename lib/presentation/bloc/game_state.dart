@@ -9,12 +9,13 @@ enum GameStatus { initial, loading, ready, combining, error }
 
 class GameState extends Equatable {
   final GameStatus status;
-  final List<Word> paletteWords;        // 하단 팔레트 단어들
-  final List<CanvasWord> canvasWords;   // 캔버스에 놓인 단어들
-  final List<Word> discoveredWords;     // 발견한 단어 목록 (도감)
-  final WordCombination? lastCombination; // 최근 합성 결과
-  final bool showCombinationResult;     // 합성 결과 팝업 표시 여부
+  final List<Word> paletteWords;
+  final List<CanvasWord> canvasWords;
+  final List<Word> discoveredWords;
+  final WordCombination? lastCombination;
+  final bool showCombinationResult;
   final String? errorMessage;
+  final WordCombination? hintCombination; // ← 추가
 
   const GameState({
     this.status = GameStatus.initial,
@@ -24,6 +25,7 @@ class GameState extends Equatable {
     this.lastCombination,
     this.showCombinationResult = false,
     this.errorMessage,
+    this.hintCombination, // ← 추가
   });
 
   GameState copyWith({
@@ -34,7 +36,9 @@ class GameState extends Equatable {
     WordCombination? lastCombination,
     bool? showCombinationResult,
     String? errorMessage,
+    WordCombination? hintCombination,  // ← 추가
     bool clearLastCombination = false,
+    bool clearHint = false,            // ← 추가
   }) {
     return GameState(
       status: status ?? this.status,
@@ -44,17 +48,19 @@ class GameState extends Equatable {
       lastCombination: clearLastCombination ? null : (lastCombination ?? this.lastCombination),
       showCombinationResult: showCombinationResult ?? this.showCombinationResult,
       errorMessage: errorMessage ?? this.errorMessage,
+      hintCombination: clearHint ? null : (hintCombination ?? this.hintCombination), // ← 추가
     );
   }
 
   @override
   List<Object?> get props => [
-        status,
-        paletteWords,
-        canvasWords,
-        discoveredWords,
-        lastCombination,
-        showCombinationResult,
-        errorMessage,
-      ];
+    status,
+    paletteWords,
+    canvasWords,
+    discoveredWords,
+    lastCombination,
+    showCombinationResult,
+    errorMessage,
+    hintCombination, // ← 추가
+  ];
 }

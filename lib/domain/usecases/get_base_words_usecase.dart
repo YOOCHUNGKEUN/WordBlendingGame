@@ -10,5 +10,3 @@ class GetBaseWordsUseCase {
 
   Future<Either<String, List<Word>>> call() => repository.getBaseWords();
 }
-
-// lib/domain/usecases/combine_words_usecase.dart (아래에 같이 작성)

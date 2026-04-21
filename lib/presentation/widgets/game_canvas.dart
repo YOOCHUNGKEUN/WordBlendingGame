@@ -8,7 +8,10 @@ import '../bloc/game_bloc.dart';
 import '../bloc/game_event.dart';
 import '../bloc/game_state.dart';
 import 'word_card.dart';
-import '../../core/theme/app_theme.dart';
+import '../../core/constants/app_colors.dart';
+
+const double _cardW = 108.0;
+const double _cardH = 52.0;
 
 class GameCanvas extends StatefulWidget {
   const GameCanvas({super.key});
@@ -19,10 +22,25 @@ class GameCanvas extends StatefulWidget {
 
 class _GameCanvasState extends State<GameCanvas> {
   final TransformationController _transformController =
-      TransformationController();
+  TransformationController();
 
-  // 드래그 중인 캔버스 단어 ID
-  String? _draggingCanvasId;
+  double _canvasW = 2000;
+  double _canvasH = 4000;
+
+  final Map<String, _DragStartInfo> _dragStartInfo = {};
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final size = MediaQuery.of(context).size;
+    _canvasW = size.width * 10;
+    _canvasH = size.height * 10;
+
+    final offsetX = (_canvasW / 2) - (size.width / 2);
+    final offsetY = (_canvasH / 2) - (size.height / 2);
+    _transformController.value = Matrix4.identity()
+      ..translate(-offsetX, -offsetY);
+  }
 
   @override
   void dispose() {
@@ -30,11 +48,15 @@ class _GameCanvasState extends State<GameCanvas> {
     super.dispose();
   }
 
-  /// 화면 좌표 → 캔버스 좌표 변환
-  Offset _screenToCanvas(Offset screenOffset) {
+  Offset _toCanvasCoord(Offset viewportOffset) {
     final Matrix4 inverse = Matrix4.inverted(_transformController.value);
-    final transformed = MatrixUtils.transformPoint(inverse, screenOffset);
-    return transformed;
+    return MatrixUtils.transformPoint(inverse, viewportOffset);
+  }
+
+  Offset _globalToCanvas(Offset globalOffset) {
+    final RenderBox box = context.findRenderObject() as RenderBox;
+    final localOffset = box.globalToLocal(globalOffset);
+    return _toCanvasCoord(localOffset);
   }
 
   @override
@@ -43,47 +65,51 @@ class _GameCanvasState extends State<GameCanvas> {
       builder: (context, state) {
         return DragTarget<Word>(
           onAcceptWithDetails: (details) {
-            // 팔레트에서 캔버스로 드래그 완료
-            final RenderBox box =
-                context.findRenderObject() as RenderBox;
+            final RenderBox box = context.findRenderObject() as RenderBox;
             final localPos = box.globalToLocal(details.offset);
-            final canvasPos = _screenToCanvas(localPos);
+            final canvasPos = _toCanvasCoord(localPos);
 
-            context.read<GameBloc>().add(WordPlacedOnCanvas(
-                  word: details.data,
-                  x: canvasPos.dx,
-                  y: canvasPos.dy,
-                ));
+            // 팔레트에서 드롭 → 배치 + 즉시 합성 시도
+            context.read<GameBloc>().add(WordDroppedFromPalette(
+              word: details.data,
+              x: canvasPos.dx,
+              y: canvasPos.dy,
+            ));
           },
           builder: (context, candidateData, rejectedData) {
             final isHovering = candidateData.isNotEmpty;
-            return Container(
-              decoration: BoxDecoration(
-                color: isHovering
-                    ? AppTheme.primary.withOpacity(0.05)
-                    : AppTheme.canvasBackground,
-              ),
-              child: ClipRect(
-                child: InteractiveViewer(
-                  transformationController: _transformController,
-                  minScale: 0.4,
-                  maxScale: 2.5,
-                  boundaryMargin: const EdgeInsets.all(200),
-                  child: SizedBox(
-                    width: 2000,
-                    height: 2000,
-                    child: Stack(
-                      children: [
-                        // 격자 배경 (노트처럼)
-                        _buildGridBackground(),
-                        // 연결선 (합성 가능 힌트용 - 옵션)
-                        // 캔버스 단어들
-                        ...state.canvasWords.map((cw) => _buildDraggableWord(context, cw)),
-                      ],
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                return Container(
+                  width: constraints.maxWidth,
+                  height: constraints.maxHeight,
+                  color: isHovering
+                      ? AppColors.primary.withOpacity(0.05)
+                      : AppColors.canvasBackground,
+                  child: ClipRect(
+                    child: InteractiveViewer(
+                      transformationController: _transformController,
+                      minScale: 0.3,
+                      maxScale: 3.0,
+                      boundaryMargin:
+                      const EdgeInsets.all(double.infinity),
+                      constrained: false,
+                      child: SizedBox(
+                        width: _canvasW,
+                        height: _canvasH,
+                        child: Stack(
+                          children: [
+                            _buildGridBackground(),
+                            ...state.canvasWords.map(
+                                  (cw) => _buildDraggableWord(context, cw),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             );
           },
         );
@@ -93,46 +119,64 @@ class _GameCanvasState extends State<GameCanvas> {
 
   Widget _buildGridBackground() {
     return CustomPaint(
-      size: const Size(2000, 2000),
-      painter: _GridPainter(),
+      size: Size(_canvasW, _canvasH),
+      painter: _GridPainter(canvasW: _canvasW, canvasH: _canvasH),
     );
   }
 
   Widget _buildDraggableWord(BuildContext context, CanvasWord canvasWord) {
     return Positioned(
-      left: canvasWord.x - 50, // 카드 중앙 기준
-      top: canvasWord.y - 26,
+      left: canvasWord.x - _cardW / 2,
+      top: canvasWord.y - _cardH / 2,
       child: GestureDetector(
+        onPanStart: (details) {
+          final fingerCanvasPos =
+          _globalToCanvas(details.globalPosition);
+          _dragStartInfo[canvasWord.canvasId] = _DragStartInfo(
+            cardStartPos: Offset(canvasWord.x, canvasWord.y),
+            fingerStartPos: fingerCanvasPos,
+          );
+        },
         onPanUpdate: (details) {
-          // InteractiveViewer 내부에서 드래그
-          final RenderBox box = context.findRenderObject() as RenderBox;
-          // 현재 transform 반영해서 델타를 캔버스 좌표로 변환
-          final scale = _transformController.value.getMaxScaleOnAxis();
-          final dx = details.delta.dx / scale;
-          final dy = details.delta.dy / scale;
+          final info = _dragStartInfo[canvasWord.canvasId];
+          if (info == null) return;
+
+          final fingerNow = _globalToCanvas(details.globalPosition);
+          final delta = fingerNow - info.fingerStartPos;
+
+          final newX = info.cardStartPos.dx + delta.dx;
+          final newY = info.cardStartPos.dy + delta.dy;
+
+          _dragStartInfo[canvasWord.canvasId] = _DragStartInfo(
+            cardStartPos: info.cardStartPos,
+            fingerStartPos: info.fingerStartPos,
+            currentPos: Offset(newX, newY),
+          );
 
           context.read<GameBloc>().add(CanvasWordMoved(
-                canvasId: canvasWord.canvasId,
-                x: canvasWord.x + dx,
-                y: canvasWord.y + dy,
-              ));
+            canvasId: canvasWord.canvasId,
+            x: newX,
+            y: newY,
+          ));
         },
-        onPanEnd: (details) {
+        onPanEnd: (_) {
+          final info = _dragStartInfo[canvasWord.canvasId];
+          final currentPos =
+              info?.currentPos ?? Offset(canvasWord.x, canvasWord.y);
+          _dragStartInfo.remove(canvasWord.canvasId);
+
           context.read<GameBloc>().add(WordDropped(
-                draggedCanvasId: canvasWord.canvasId,
-                dropX: canvasWord.x,
-                dropY: canvasWord.y,
-              ));
+            draggedCanvasId: canvasWord.canvasId,
+            dropX: currentPos.dx,
+            dropY: currentPos.dy,
+          ));
         },
-        onLongPress: () {
-          // 길게 누르면 삭제
-          _showDeleteDialog(context, canvasWord);
-        },
+        onLongPress: () => _showDeleteDialog(context, canvasWord),
         child: WordCard(
           word: canvasWord.word,
           isOnCanvas: true,
-          width: 108,
-          height: 52,
+          width: _cardW,
+          height: _cardH,
         ),
       ),
     );
@@ -142,11 +186,10 @@ class _GameCanvasState extends State<GameCanvas> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(
-          '${canvasWord.word.emoji} ${canvasWord.word.text}',
-          style: const TextStyle(fontSize: 18),
-        ),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)),
+        title:
+        Text('${canvasWord.word.emoji} ${canvasWord.word.text}'),
         content: const Text('이 단어를 지울까요?'),
         actions: [
           TextButton(
@@ -155,12 +198,12 @@ class _GameCanvasState extends State<GameCanvas> {
           ),
           TextButton(
             onPressed: () {
-              context
-                  .read<GameBloc>()
-                  .add(CanvasWordDeleted(canvasId: canvasWord.canvasId));
+              context.read<GameBloc>().add(
+                  CanvasWordDeleted(canvasId: canvasWord.canvasId));
               Navigator.pop(ctx);
             },
-            child: const Text('지우기', style: TextStyle(color: Colors.red)),
+            child: const Text('지우기',
+                style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -168,21 +211,39 @@ class _GameCanvasState extends State<GameCanvas> {
   }
 }
 
+class _DragStartInfo {
+  final Offset cardStartPos;
+  final Offset fingerStartPos;
+  final Offset? currentPos;
+
+  const _DragStartInfo({
+    required this.cardStartPos,
+    required this.fingerStartPos,
+    this.currentPos,
+  });
+}
+
 class _GridPainter extends CustomPainter {
+  final double canvasW;
+  final double canvasH;
+
+  const _GridPainter({required this.canvasW, required this.canvasH});
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppTheme.primary.withOpacity(0.07)
+      ..color = AppColors.primary.withOpacity(0.07)
       ..strokeWidth = 1;
     const spacing = 40.0;
-    for (double x = 0; x <= size.width; x += spacing) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+    for (double x = 0; x <= canvasW; x += spacing) {
+      canvas.drawLine(Offset(x, 0), Offset(x, canvasH), paint);
     }
-    for (double y = 0; y <= size.height; y += spacing) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+    for (double y = 0; y <= canvasH; y += spacing) {
+      canvas.drawLine(Offset(0, y), Offset(canvasW, y), paint);
     }
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _GridPainter old) =>
+      old.canvasW != canvasW || old.canvasH != canvasH;
 }

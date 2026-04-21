@@ -1,5 +1,3 @@
-// lib/domain/usecases/save_discovered_word_usecase.dart
-
 import 'package:dartz/dartz.dart';
 import '../entities/word.dart';
 import '../repositories/word_repository.dart';
