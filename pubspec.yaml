@@ -30,11 +30,20 @@ dependencies:
   shared_preferences: ^2.2.2
   audioplayers: ^6.0.0
   confetti: ^0.7.0
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/images/app_icon.png"  # 아이콘 이미지 경로
+  min_sdk_android: 21
+  adaptive_icon_background: "#F8F7FF"  # 배경색 (앱 테마색)
+
 
 flutter:
   uses-material-design: true
