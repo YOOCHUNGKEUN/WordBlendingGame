@@ -66,17 +66,20 @@ class _GameCanvasState extends State<GameCanvas> {
         return DragTarget<Word>(
           onAcceptWithDetails: (details) {
             final RenderBox box = context.findRenderObject() as RenderBox;
+            // details.offset은 드래그 피드백 위젯의 좌상단 기준
+            // 카드 중앙으로 보정해줘야 함
             final localPos = box.globalToLocal(details.offset);
-            final canvasPos = _toCanvasCoord(localPos);
+            final canvasPos = _toCanvasCoord(Offset(
+              localPos.dx + _cardW / 2,  // ← 카드 너비 절반 더하기
+              localPos.dy + _cardH / 2,  // ← 카드 높이 절반 더하기
+            ));
 
-            // 팔레트에서 드롭 → 배치 + 즉시 합성 시도
             context.read<GameBloc>().add(WordDroppedFromPalette(
               word: details.data,
               x: canvasPos.dx,
               y: canvasPos.dy,
             ));
-          },
-          builder: (context, candidateData, rejectedData) {
+          },          builder: (context, candidateData, rejectedData) {
             final isHovering = candidateData.isNotEmpty;
             return LayoutBuilder(
               builder: (context, constraints) {
