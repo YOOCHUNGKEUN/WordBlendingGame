@@ -300,30 +300,36 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   // ── 힌트 요청 ─────────────────────────────────────────────
   void _onHintRequested(HintRequested event, Emitter<GameState> emit) {
-    final available = WordDataRegistry.combinations.where((combo) {
-      final w1 = combo['w1'] as String;
-      final w2 = combo['w2'] as String;
+    final allCombinations = WordDataRegistry.combinations;
+
+    // 아직 안 보여준 것 필터
+    List<Map<String, dynamic>> candidates = allCombinations
+        .where((combo) {
       final resultId =
       (combo['result'] as Map<String, dynamic>)['id'] as String;
+      return !state.shownHintIds.contains(resultId);
+    })
+        .toList();
 
-      final w1InPalette = state.paletteWords.any((w) => w.id == w1);
-      final w2InPalette = state.paletteWords.any((w) => w.id == w2);
-      final notDiscovered =
-      !state.discoveredWords.any((w) => w.id == resultId);
+    // 전부 다 보여줬으면 리셋
+    List<String> newShownIds;
+    if (candidates.isEmpty) {
+      candidates = List.from(allCombinations);
+      newShownIds = <String>[];
+    } else {
+      newShownIds = <String>[...state.shownHintIds];
+    }
 
-      return w1InPalette && w2InPalette && notDiscovered;
-    }).toList();
-
-    if (available.isEmpty) return;
-
-    final picked = available[Random().nextInt(available.length)];
+    // 순서대로 첫 번째 것 선택 (랜덤 아닌 순차)
+    final picked = candidates.first;
     final resultMap = picked['result'] as Map<String, dynamic>;
+    final resultId = resultMap['id'] as String;
 
     final hint = WordCombination(
       word1Id: picked['w1'] as String,
       word2Id: picked['w2'] as String,
       result: Word(
-        id: resultMap['id'] as String,
+        id: resultId,
         text: resultMap['text'] as String,
         emoji: resultMap['emoji'] as String,
         category: WordCategory.values.firstWhere(
@@ -335,7 +341,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       description: picked['desc'] as String,
     );
 
-    emit(state.copyWith(hintCombination: hint));
+    newShownIds = <String>[...newShownIds, resultId];
+
+    emit(state.copyWith(
+      hintCombination: hint,
+      shownHintIds: newShownIds,
+    ));
   }
 
   // ── 힌트 닫기 ─────────────────────────────────────────────

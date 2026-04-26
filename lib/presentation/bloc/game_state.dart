@@ -15,7 +15,8 @@ class GameState extends Equatable {
   final WordCombination? lastCombination;
   final bool showCombinationResult;
   final String? errorMessage;
-  final WordCombination? hintCombination; // ← 추가
+  final WordCombination? hintCombination;
+  final List<String> shownHintIds; // ← 힌트 순환용
 
   const GameState({
     this.status = GameStatus.initial,
@@ -25,7 +26,8 @@ class GameState extends Equatable {
     this.lastCombination,
     this.showCombinationResult = false,
     this.errorMessage,
-    this.hintCombination, // ← 추가
+    this.hintCombination,
+    this.shownHintIds = const [], // ← 추가
   });
 
   GameState copyWith({
@@ -36,19 +38,25 @@ class GameState extends Equatable {
     WordCombination? lastCombination,
     bool? showCombinationResult,
     String? errorMessage,
-    WordCombination? hintCombination,  // ← 추가
+    WordCombination? hintCombination,
+    List<String>? shownHintIds, // ← 추가
     bool clearLastCombination = false,
-    bool clearHint = false,            // ← 추가
+    bool clearHint = false,
   }) {
     return GameState(
       status: status ?? this.status,
       paletteWords: paletteWords ?? this.paletteWords,
       canvasWords: canvasWords ?? this.canvasWords,
       discoveredWords: discoveredWords ?? this.discoveredWords,
-      lastCombination: clearLastCombination ? null : (lastCombination ?? this.lastCombination),
-      showCombinationResult: showCombinationResult ?? this.showCombinationResult,
+      lastCombination: clearLastCombination
+          ? null
+          : (lastCombination ?? this.lastCombination),
+      showCombinationResult:
+      showCombinationResult ?? this.showCombinationResult,
       errorMessage: errorMessage ?? this.errorMessage,
-      hintCombination: clearHint ? null : (hintCombination ?? this.hintCombination), // ← 추가
+      hintCombination:
+      clearHint ? null : (hintCombination ?? this.hintCombination),
+      shownHintIds: shownHintIds ?? this.shownHintIds, // ← 추가
     );
   }
 
@@ -61,6 +69,7 @@ class GameState extends Equatable {
     lastCombination,
     showCombinationResult,
     errorMessage,
-    hintCombination, // ← 추가
+    hintCombination,
+    shownHintIds, // ← 추가
   ];
 }
