@@ -85,40 +85,14 @@ class _GamePageState extends State<GamePage> {
       ),
       child: Row(
         children: [
-          Container(
-            width: 38,
-            height: 38,
-            decoration: BoxDecoration(
-              color: AppColors.accent,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.white, width: 2),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.popOrange.withOpacity(0.28),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: const Center(
-              child: Text(
-                '가',
-                style: TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
+          SizedBox(
+            width: 92,
             child: Stack(
               children: [
                 Text(
                   AppStrings.alrchmey_word,
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 22,
                     fontWeight: FontWeight.w900,
                     foreground: Paint()
                       ..style = PaintingStyle.stroke
@@ -130,7 +104,7 @@ class _GamePageState extends State<GamePage> {
                 Text(
                   AppStrings.alrchmey_word,
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 22,
                     fontWeight: FontWeight.w900,
                     color: AppColors.titleBlue,
                     shadows: [
@@ -145,26 +119,7 @@ class _GamePageState extends State<GamePage> {
               ],
             ),
           ),
-          Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              color: AppColors.success,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.white, width: 2),
-            ),
-            child: const Center(
-              child: Text(
-                '나',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
+          const Spacer(),
 
           Container(
             decoration: BoxDecoration(
