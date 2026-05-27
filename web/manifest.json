@@ -1,11 +1,11 @@
 {
-    "name": "word_alchemy_new",
-    "short_name": "word_alchemy_new",
+    "name": "단어팡",
+    "short_name": "단어팡",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#B7EF63",
+    "theme_color": "#1F8CFF",
+    "description": "통통 튀는 단어 조합 놀이",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

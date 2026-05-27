@@ -24,7 +24,7 @@ class RecipeBookPage extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColors.background,
           appBar: AppBar(
-            backgroundColor: Colors.transparent,
+            backgroundColor: AppColors.background,
             elevation: 0,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios_rounded),
@@ -32,11 +32,11 @@ class RecipeBookPage extends StatelessWidget {
               onPressed: () => Navigator.pop(context),
             ),
             title: Text(
-              '📖 내 단어 도감',
+              '단어팡 도감',
               style: TextStyle(
-                color: AppColors.textDark,
-                fontWeight: FontWeight.w800,
-                fontSize: 18,
+                color: AppColors.titleBlue,
+                fontWeight: FontWeight.w900,
+                fontSize: 20,
               ),
             ),
             centerTitle: true,
@@ -140,12 +140,13 @@ class _WordTile extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: _bgColor,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: Colors.white, width: 2),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              color: AppColors.titleBlue.withOpacity(0.14),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -158,7 +159,7 @@ class _WordTile extends StatelessWidget {
               word.text,
               style: TextStyle(
                 fontSize: 13,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w900,
                 color: AppColors.textDark,
               ),
               textAlign: TextAlign.center,
@@ -196,13 +197,14 @@ class _ProgressBanner extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.primary, const Color(0xFF9B93FF)],
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+          colors: [AppColors.primary, AppColors.secondary],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: AppColors.accent, width: 2),
         boxShadow: [
           BoxShadow(
             color: AppColors.primary.withOpacity(0.3),
@@ -222,7 +224,7 @@ class _ProgressBanner extends StatelessWidget {
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
                 const SizedBox(height: 8),

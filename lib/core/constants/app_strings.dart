@@ -33,7 +33,7 @@ class AppStrings {
 
 
   static const String calling_words = '단어 카드를 불러오는 중...';
-  static const String alrchmey_word = '단어 연금술사';
+  static const String alrchmey_word = '단어팡';
   static const String word_field_guide = '도감';
 
 

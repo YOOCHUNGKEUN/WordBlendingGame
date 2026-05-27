@@ -36,18 +36,23 @@ class WordCard extends StatelessWidget {
         height: height ?? 52,
         decoration: BoxDecoration(
           color: _bgColor,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isOnCanvas
-                ? AppColors.primary.withOpacity(0.4)
+                ? AppColors.titleBlue
                 : Colors.white,
-            width: isOnCanvas ? 2 : 1.5,
+            width: isOnCanvas ? 2.5 : 2,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: isOnCanvas ? 8 : 4,
-              offset: const Offset(0, 2),
+              color: AppColors.titleBlue.withOpacity(0.16),
+              blurRadius: isOnCanvas ? 10 : 7,
+              offset: const Offset(0, 4),
+            ),
+            BoxShadow(
+              color: Colors.white.withOpacity(0.75),
+              blurRadius: 0,
+              offset: const Offset(0, -2),
             ),
           ],
         ),
@@ -64,7 +69,7 @@ class WordCard extends StatelessWidget {
                 word.text,
                 style: TextStyle(
                   fontSize: 13,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w900,
                   color: AppColors.textDark,
                 ),
                 overflow: TextOverflow.ellipsis,

@@ -87,7 +87,7 @@ class _GameCanvasState extends State<GameCanvas> {
                   width: constraints.maxWidth,
                   height: constraints.maxHeight,
                   color: isHovering
-                      ? AppColors.primary.withOpacity(0.05)
+                      ? AppColors.accent.withOpacity(0.16)
                       : AppColors.canvasBackground,
                   child: ClipRect(
                     child: InteractiveViewer(
@@ -235,7 +235,7 @@ class _GridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.primary.withOpacity(0.07)
+      ..color = AppColors.primary.withOpacity(0.09)
       ..strokeWidth = 1;
     const spacing = 40.0;
     for (double x = 0; x <= canvasW; x += spacing) {

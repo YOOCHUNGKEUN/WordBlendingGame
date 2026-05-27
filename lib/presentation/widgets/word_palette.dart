@@ -7,7 +7,6 @@ import '../../domain/entities/word.dart';
 import '../bloc/game_bloc.dart';
 import '../bloc/game_state.dart';
 import 'word_card.dart';
-import '../../core/theme/app_theme.dart';
 
 class WordPalette extends StatefulWidget {
   const WordPalette({super.key});
@@ -53,9 +52,9 @@ class _WordPaletteState extends State<WordPalette> {
             const BorderRadius.vertical(top: Radius.circular(24)),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withOpacity(0.12),
-                blurRadius: 20,
-                offset: const Offset(0, -4),
+                color: AppColors.titleBlue.withOpacity(0.16),
+                blurRadius: 22,
+                offset: const Offset(0, -5),
               ),
             ],
           ),
@@ -68,7 +67,7 @@ class _WordPaletteState extends State<WordPalette> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: AppColors.primaryLight,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -78,21 +77,30 @@ class _WordPaletteState extends State<WordPalette> {
                 const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
                 child: Row(
                   children: [
-                    const Text('✨ 단어 카드', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF8A8A9E))),
-                    const Text('(꾹 눌러 카드를 이동하세요)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF8A8A9E))),
+                    Expanded(
+                      child: Text(
+                        '팡팡 단어 카드',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w900,
+                          color: AppColors.titleBlue,
+                        ),
+                      ),
+                    ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 3),
+                          horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppColors.primaryLight,
+                        color: AppColors.accent,
                         borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.white, width: 2),
                       ),
                       child: Text(
                         '${state.discoveredWords.length}개 발견!',
                         style: TextStyle(
                           fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.primary,
+                          fontWeight: FontWeight.w900,
+                          color: AppColors.textDark,
                         ),
                       ),
                     ),

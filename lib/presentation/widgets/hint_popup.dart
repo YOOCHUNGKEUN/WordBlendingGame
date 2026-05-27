@@ -29,12 +29,13 @@ void showHintPopup(
               const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.amber.shade400, Colors.orange.shade400],
+                  colors: [AppColors.accent, AppColors.popOrange],
                 ),
                 borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.white, width: 2),
               ),
               child: const Text(
-                '💡 이런 조합은 어때요?',
+                '이 조합 어때요?',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 13,
@@ -77,10 +78,11 @@ void showHintPopup(
                   width: 56,
                   height: 56,
                   decoration: BoxDecoration(
-                    color: AppColors.primaryLight,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: AppColors.primary.withOpacity(0.3),
+                  color: AppColors.primaryLight,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                      color: AppColors.titleBlue.withOpacity(0.3),
+                      width: 2,
                     ),
                   ),
                   child: Center(
@@ -89,7 +91,7 @@ void showHintPopup(
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.w900,
-                        color: AppColors.primary,
+                        color: AppColors.titleBlue,
                       ),
                     ),
                   ),
@@ -105,9 +107,10 @@ void showHintPopup(
               decoration: BoxDecoration(
                 color: Colors.amber.shade50,
                 borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.accent.withOpacity(0.5)),
               ),
               child: Text(
-                '이 두 단어를 캔버스에서 합쳐보세요!\n무엇이 될까요? 🤔',
+                '이 두 단어를 캔버스에서 합쳐보세요!\n무엇이 팡 하고 나올까요?',
                 style: TextStyle(
                   fontSize: 13,
                   color: Colors.grey.shade700,
@@ -131,11 +134,12 @@ void showHintPopup(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Colors.amber.shade400,
-                        Colors.orange.shade400,
+                        AppColors.primary,
+                        AppColors.titleBlue,
                       ],
                     ),
                     borderRadius: BorderRadius.circular(30),
+                    border: Border.all(color: AppColors.accent, width: 2),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.amber.withOpacity(0.4),
@@ -145,7 +149,7 @@ void showHintPopup(
                     ],
                   ),
                   child: const Text(
-                    '도전해볼게요! 🔥',
+                    '도전해볼게요!',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,

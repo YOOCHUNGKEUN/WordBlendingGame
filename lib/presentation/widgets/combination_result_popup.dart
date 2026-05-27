@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../domain/entities/word_combination.dart';
-import '../../core/theme/app_theme.dart';
 
 /// 캔버스 합성 시 전체화면 팝업
 class CombinationResultPopup extends StatefulWidget {
@@ -75,8 +74,8 @@ class _CombinationResultPopupState extends State<CombinationResultPopup>
               ),
               child: WordCombinationCard(
                 combination: widget.combination,
-                badgeText: '🎉 새 단어 발견!',
-                confirmLabel: '와! 신기해요! 🙌',
+                badgeText: '팡! 새 단어 발견',
+                confirmLabel: '좋아! 계속 팡팡!',
                 word1Info: widget.word1Info,
                 word2Info: widget.word2Info,
                 onConfirm: widget.onDismiss,
@@ -142,6 +141,7 @@ class WordCombinationCard extends StatelessWidget {
                 colors: [AppColors.primary, AppColors.secondary],
               ),
               borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: AppColors.accent, width: 2),
             ),
             child: Text(
               badgeText,
@@ -166,7 +166,7 @@ class WordCombinationCard extends StatelessWidget {
               color: AppColors.primaryLight,
               borderRadius: BorderRadius.circular(20),
               border:
-              Border.all(color: AppColors.primary.withOpacity(0.3)),
+              Border.all(color: AppColors.titleBlue.withOpacity(0.3), width: 2),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -179,8 +179,8 @@ class WordCombinationCard extends StatelessWidget {
                     combination.result.text,
                     style: TextStyle(
                       fontSize: 26,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.textDark,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.titleBlue,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -197,6 +197,7 @@ class WordCombinationCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.amber.shade50,
               borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: AppColors.accent.withOpacity(0.5)),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,9 +228,10 @@ class WordCombinationCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [AppColors.primary, const Color(0xFF9B93FF)],
+                    colors: [AppColors.primary, AppColors.titleBlue],
                   ),
                   borderRadius: BorderRadius.circular(30),
+                  border: Border.all(color: AppColors.accent, width: 2),
                   boxShadow: [
                     BoxShadow(
                       color: AppColors.primary.withOpacity(0.35),
@@ -307,6 +309,7 @@ class WordCombinationCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white, width: 2),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -338,8 +341,8 @@ void showWordCombinationDialog({
   required WordCombination combination,
   Map<String, String>? word1Info,
   Map<String, String>? word2Info,
-  String badgeText = '📖 단어 정보',
-  String confirmLabel = '확인 ✨',
+  String badgeText = '단어 정보',
+  String confirmLabel = '확인',
 }) {
   showDialog(
     context: context,

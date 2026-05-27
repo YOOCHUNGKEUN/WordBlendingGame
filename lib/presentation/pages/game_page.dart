@@ -71,41 +71,118 @@ class _GamePageState extends State<GamePage> {
 
   Widget _buildAppBar(BuildContext context, GameState state) {
     return Container(
-      height: 60,
+      height: 68,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.background,
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            color: AppColors.success.withOpacity(0.18),
+            blurRadius: 14,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Row(
         children: [
-          // 타이틀
-          const Text('🔮', style: TextStyle(fontSize: 22)),
-          const SizedBox(width: 6),
-          Flexible(
-            child: Text(
-              AppStrings.alrchmey_word,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w900,
-                color: AppColors.textDark,
+          Container(
+            width: 38,
+            height: 38,
+            decoration: BoxDecoration(
+              color: AppColors.accent,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.white, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.popOrange.withOpacity(0.28),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: const Center(
+              child: Text(
+                '가',
+                style: TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                ),
               ),
-              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Stack(
+              children: [
+                Text(
+                  AppStrings.alrchmey_word,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w900,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 4
+                      ..color = Colors.white,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  AppStrings.alrchmey_word,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.titleBlue,
+                    shadows: [
+                      Shadow(
+                        color: AppColors.accent.withOpacity(0.8),
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: AppColors.success,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.white, width: 2),
+            ),
+            child: const Center(
+              child: Text(
+                '나',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
           const SizedBox(width: 8),
 
-          // 힌트 버튼
-          const HintWidget(),
-          const SizedBox(width: 6),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(color: AppColors.accent, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withOpacity(0.14),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: const HintWidget(),
+          ),
+          const SizedBox(width: 7),
 
-          // 도감 버튼
           GestureDetector(
             onTap: () => Navigator.push(
               context,
@@ -117,10 +194,18 @@ class _GamePageState extends State<GamePage> {
               ),
             ),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
               decoration: BoxDecoration(
-                color: AppColors.primaryLight,
-                borderRadius: BorderRadius.circular(20),
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(color: Colors.white, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withOpacity(0.24),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -129,10 +214,10 @@ class _GamePageState extends State<GamePage> {
                   const SizedBox(width: 3),
                   Text(
                     AppStrings.word_field_guide,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.primary,
+                      color: Colors.white,
                     ),
                   ),
                   if (state.discoveredWords.isNotEmpty) ...[
@@ -141,13 +226,13 @@ class _GamePageState extends State<GamePage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 5, vertical: 1),
                       decoration: BoxDecoration(
-                        color: AppColors.primary,
+                        color: AppColors.accent,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
                         '${state.discoveredWords.length}',
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: AppColors.textDark,
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
                         ),
@@ -166,8 +251,9 @@ class _GamePageState extends State<GamePage> {
             child: Container(
               padding: const EdgeInsets.all(7),
               decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.primaryLight, width: 2),
               ),
               child: const Icon(
                 Icons.cleaning_services_rounded,

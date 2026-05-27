@@ -29,18 +29,10 @@ class HintWidget extends StatelessWidget {
       child: GestureDetector(
         onTap: () => context.read<GameBloc>().add(const HintRequested()),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
           decoration: BoxDecoration(
-            color: Colors.amber.shade50,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.amber.shade300),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.amber.withOpacity(0.15),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -51,8 +43,8 @@ class HintWidget extends StatelessWidget {
                 '힌트',
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.amber.shade700,
+                  fontWeight: FontWeight.w900,
+                  color: AppColors.popOrange,
                 ),
               ),
             ],

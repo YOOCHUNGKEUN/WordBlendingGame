@@ -17,6 +17,14 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light,
+    ),
+  );
+
   // DI 초기화
   await di.init();
   runApp(const WordAlchemyApp());
@@ -28,7 +36,7 @@ class WordAlchemyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '단어 연금술사',
+      title: '단어팡',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       home: BlocProvider(
