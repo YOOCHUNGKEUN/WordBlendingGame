@@ -301,26 +301,47 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   // ── 힌트 요청 ─────────────────────────────────────────────
   void _onHintRequested(HintRequested event, Emitter<GameState> emit) {
     final allCombinations = WordDataRegistry.combinations;
+    final discoveredIds = state.discoveredWords.map((w) => w.id).toSet();
+    final availableIds = {
+      ...state.paletteWords.map((w) => w.id),
+      ...state.canvasWords.map((cw) => cw.word.id),
+    };
 
-    // 아직 안 보여준 것 필터
-    List<Map<String, dynamic>> candidates = allCombinations
-        .where((combo) {
+    List<Map<String, dynamic>> candidates = allCombinations.where((combo) {
+      final resultId =
+      (combo['result'] as Map<String, dynamic>)['id'] as String;
+      return !discoveredIds.contains(resultId);
+    }).toList();
+
+    if (candidates.isEmpty) {
+      candidates = List<Map<String, dynamic>>.from(allCombinations);
+    }
+
+    final unseenCandidates = candidates.where((combo) {
       final resultId =
       (combo['result'] as Map<String, dynamic>)['id'] as String;
       return !state.shownHintIds.contains(resultId);
-    })
-        .toList();
+    }).toList();
 
     // 전부 다 보여줬으면 리셋
     List<String> newShownIds;
-    if (candidates.isEmpty) {
-      candidates = List.from(allCombinations);
+    if (unseenCandidates.isEmpty) {
       newShownIds = <String>[];
     } else {
+      candidates = unseenCandidates;
       newShownIds = <String>[...state.shownHintIds];
     }
 
-    // 순서대로 첫 번째 것 선택 (랜덤 아닌 순차)
+    candidates.sort((a, b) {
+      final scoreA = _hintScore(a, availableIds, discoveredIds);
+      final scoreB = _hintScore(b, availableIds, discoveredIds);
+      if (scoreA != scoreB) return scoreA.compareTo(scoreB);
+
+      final levelA = ((a['result'] as Map<String, dynamic>)['level'] as int?) ?? 1;
+      final levelB = ((b['result'] as Map<String, dynamic>)['level'] as int?) ?? 1;
+      return levelA.compareTo(levelB);
+    });
+
     final picked = candidates.first;
     final resultMap = picked['result'] as Map<String, dynamic>;
     final resultId = resultMap['id'] as String;
@@ -347,6 +368,36 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       hintCombination: hint,
       shownHintIds: newShownIds,
     ));
+  }
+
+  int _hintScore(
+    Map<String, dynamic> combo,
+    Set<String> availableIds,
+    Set<String> discoveredIds,
+  ) {
+    final w1 = combo['w1'] as String;
+    final w2 = combo['w2'] as String;
+    final resultMap = combo['result'] as Map<String, dynamic>;
+    final resultId = resultMap['id'] as String;
+    final resultLevel = resultMap['level'] as int? ?? 1;
+
+    var score = resultLevel * 10;
+
+    final hasW1 = availableIds.contains(w1);
+    final hasW2 = availableIds.contains(w2);
+    if (hasW1 && hasW2) {
+      score += 0;
+    } else if (hasW1 || hasW2) {
+      score += 100;
+    } else {
+      score += 300;
+    }
+
+    if (discoveredIds.contains(resultId)) {
+      score += 1000;
+    }
+
+    return score;
   }
 
   // ── 힌트 닫기 ─────────────────────────────────────────────

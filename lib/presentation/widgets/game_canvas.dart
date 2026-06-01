@@ -2,11 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../data/datasources/word_data/word_data_registry.dart';
 import '../../domain/entities/canvas_word.dart';
 import '../../domain/entities/word.dart';
+import '../../domain/entities/word_combination.dart';
 import '../bloc/game_bloc.dart';
 import '../bloc/game_event.dart';
 import '../bloc/game_state.dart';
+import 'combination_result_popup.dart';
 import 'word_card.dart';
 import '../../core/constants/app_colors.dart';
 
@@ -132,6 +135,7 @@ class _GameCanvasState extends State<GameCanvas> {
       left: canvasWord.x - _cardW / 2,
       top: canvasWord.y - _cardH / 2,
       child: GestureDetector(
+        onTap: () => _showWordInfo(context, canvasWord.word),
         onPanStart: (details) {
           final fingerCanvasPos =
           _globalToCanvas(details.globalPosition);
@@ -183,6 +187,65 @@ class _GameCanvasState extends State<GameCanvas> {
         ),
       ),
     );
+  }
+
+  void _showWordInfo(BuildContext context, Word word) {
+    final recipe = _findRecipe(word);
+
+    if (recipe != null) {
+      showWordCombinationDialog(
+        context: context,
+        combination: recipe,
+        word1Info: _findWordInfo(recipe.word1Id),
+        word2Info: _findWordInfo(recipe.word2Id),
+      );
+      return;
+    }
+
+    showWordCombinationDialog(
+      context: context,
+      combination: WordCombination(
+        word1Id: '',
+        word2Id: '',
+        result: word,
+        description: '기본 단어예요! 다른 단어와 합쳐보세요. ✨',
+      ),
+      badgeText: '⭐ 기본 단어',
+      confirmLabel: '알겠어요!',
+    );
+  }
+
+  WordCombination? _findRecipe(Word word) {
+    for (final combo in WordDataRegistry.combinations) {
+      final resultMap = combo['result'] as Map<String, dynamic>;
+      if (resultMap['id'] == word.id) {
+        return WordCombination(
+          word1Id: combo['w1'] as String,
+          word2Id: combo['w2'] as String,
+          result: word,
+          description: combo['desc'] as String,
+        );
+      }
+    }
+    return null;
+  }
+
+  Map<String, String> _findWordInfo(String id) {
+    for (final w in WordDataRegistry.baseWords) {
+      if (w['id'] == id) {
+        return {'text': w['text'] as String, 'emoji': w['emoji'] as String};
+      }
+    }
+    for (final combo in WordDataRegistry.combinations) {
+      final result = combo['result'] as Map<String, dynamic>;
+      if (result['id'] == id) {
+        return {
+          'text': result['text'] as String,
+          'emoji': result['emoji'] as String,
+        };
+      }
+    }
+    return {'text': id, 'emoji': '❓'};
   }
 
   void _showDeleteDialog(BuildContext context, CanvasWord canvasWord) {
