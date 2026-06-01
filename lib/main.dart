@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'core/ads/ad_service.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/theme/app_theme.dart';
 import 'presentation/bloc/game_bloc.dart';
@@ -27,6 +28,7 @@ void main() async {
 
   // DI 초기화
   await di.init();
+  await AdService.instance.initialize(preferences: di.sl());
   runApp(const WordAlchemyApp());
 }
 

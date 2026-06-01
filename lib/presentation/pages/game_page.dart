@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../core/ads/ad_service.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
 import '../bloc/game_bloc.dart';
@@ -19,6 +20,9 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
+  int _titleTapCount = 0;
+  DateTime? _lastTitleTapAt;
+
   @override
   void initState() {
     super.initState();
@@ -85,38 +89,42 @@ class _GamePageState extends State<GamePage> {
       ),
       child: Row(
         children: [
-          SizedBox(
-            width: 92,
-            child: Stack(
-              children: [
-                Text(
-                  AppStrings.alrchmey_word,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w900,
-                    foreground: Paint()
-                      ..style = PaintingStyle.stroke
-                      ..strokeWidth = 4
-                      ..color = Colors.white,
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: _handleTitleTap,
+            child: SizedBox(
+              width: 92,
+              child: Stack(
+                children: [
+                  Text(
+                    AppStrings.alrchmey_word,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                      foreground: Paint()
+                        ..style = PaintingStyle.stroke
+                        ..strokeWidth = 4
+                        ..color = Colors.white,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  AppStrings.alrchmey_word,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.titleBlue,
-                    shadows: [
-                      Shadow(
-                        color: AppColors.accent.withOpacity(0.8),
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                  Text(
+                    AppStrings.alrchmey_word,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.titleBlue,
+                      shadows: [
+                        Shadow(
+                          color: AppColors.accent.withOpacity(0.8),
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           const Spacer(),
@@ -222,6 +230,46 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
+  void _handleTitleTap() {
+    final now = DateTime.now();
+    final lastTapAt = _lastTitleTapAt;
+    if (lastTapAt == null || now.difference(lastTapAt).inSeconds > 2) {
+      _titleTapCount = 0;
+    }
+
+    _lastTitleTapAt = now;
+    _titleTapCount += 1;
+
+    if (_titleTapCount >= 5) {
+      _titleTapCount = 0;
+      _showAdUnlockDialog(context);
+    }
+  }
+
+  Future<void> _showAdUnlockDialog(BuildContext context) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final result = await showDialog<_AdUnlockResult>(
+      context: context,
+      builder: (_) => const _AdUnlockDialog(),
+    );
+
+    if (!mounted || result == null) return;
+
+    if (result == _AdUnlockResult.success) {
+      await AdService.instance.setAdsDisabled(true);
+      messenger.showSnackBar(
+        const SnackBar(content: Text('광고 제외가 적용됐어요.')),
+      );
+      return;
+    }
+
+    if (result == _AdUnlockResult.invalid) {
+      messenger.showSnackBar(
+        const SnackBar(content: Text('코드가 맞지 않아요.')),
+      );
+    }
+  }
+
   void _showClearDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -245,6 +293,59 @@ class _GamePageState extends State<GamePage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+enum _AdUnlockResult { success, invalid }
+
+class _AdUnlockDialog extends StatefulWidget {
+  const _AdUnlockDialog();
+
+  @override
+  State<_AdUnlockDialog> createState() => _AdUnlockDialogState();
+}
+
+class _AdUnlockDialogState extends State<_AdUnlockDialog> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    final result = AdService.instance.isValidUnlockCode(_controller.text)
+        ? _AdUnlockResult.success
+        : _AdUnlockResult.invalid;
+    Navigator.pop(context, result);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: const Text('광고 제외 코드'),
+      content: TextField(
+        controller: _controller,
+        autofocus: true,
+        textInputAction: TextInputAction.done,
+        onSubmitted: (_) => _submit(),
+        decoration: const InputDecoration(
+          hintText: '코드를 입력하세요',
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('취소'),
+        ),
+        TextButton(
+          onPressed: _submit,
+          child: const Text('확인'),
+        ),
+      ],
     );
   }
 }

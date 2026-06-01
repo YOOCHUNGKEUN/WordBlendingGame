@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../core/ads/ad_service.dart';
 import '../../core/constants/app_colors.dart';
 import '../bloc/game_bloc.dart';
 import '../bloc/game_event.dart';
@@ -27,7 +28,13 @@ class HintWidget extends StatelessWidget {
         );
       },
       child: GestureDetector(
-        onTap: () => context.read<GameBloc>().add(const HintRequested()),
+        onTap: () {
+          final bloc = context.read<GameBloc>();
+          AdService.instance.showRewardedHintAd(
+            onRewardEarned: () => bloc.add(const HintRequested()),
+            onAdUnavailable: () => bloc.add(const HintRequested()),
+          );
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
           decoration: BoxDecoration(
