@@ -9,7 +9,7 @@ class AdService {
 
   static const String unlockCode = 'wordpang-free';
   static const String _adsDisabledKey = 'ads_disabled';
-  static const String _androidRewardedAdUnitId = 'ca-app-pub-3940256099942544/5224354917';
+  static const String _androidRewardedAdUnitId = 'ca-app-pub-4656509147076490/7240617803';
   static const String _iosRewardedAdUnitId = 'ca-app-pub-3940256099942544/1712485313';
 
   SharedPreferences? _preferences;
