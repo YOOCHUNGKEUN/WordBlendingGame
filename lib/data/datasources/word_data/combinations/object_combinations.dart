@@ -1,87 +1,57 @@
 const List<Map<String, dynamic>> objectCombinations = [
   {
-    'w1': 'house', 'w2': 'tree',
-    'result': {'id': 'treehouse', 'text': '나무집', 'emoji': '🏡', 'category': 'object', 'level': 2},
-    'desc': '나무 위에 지은 집이 나무집이에요!',
+    'w1': 'mud', 'w2': 'fire',
+    'result': {'id': 'brick', 'text': '벽돌', 'emoji': '🧱', 'category': 'object', 'level': 3},
+    'desc': '진흙을 모양내어 굽고 말리면 단단한 벽돌을 만들 수 있어요.',
   },
   {
-    'w1': 'house', 'w2': 'fire',
-    'result': {'id': 'fireplace', 'text': '벽난로', 'emoji': '🪵', 'category': 'object', 'level': 2},
-    'desc': '집 안에 있는 불이 벽난로예요!',
+    'w1': 'brick', 'w2': 'house',
+    'result': {'id': 'brick_house', 'text': '벽돌집', 'emoji': '🏠', 'category': 'object', 'level': 3},
+    'desc': '벽돌을 쌓아 튼튼한 벽돌집을 지을 수 있어요.',
+  },
+  {
+    'w1': 'tree', 'w2': 'house',
+    'result': {'id': 'treehouse', 'text': '나무집', 'emoji': '🏡', 'category': 'object', 'level': 2},
+    'desc': '나무 위나 나무 재료로 만든 집을 나무집이라고 해요.',
   },
   {
     'w1': 'stone', 'w2': 'house',
-    'result': {'id': 'castle', 'text': '성', 'emoji': '🏰', 'category': 'object', 'level': 2},
-    'desc': '돌로 크게 쌓아 만든 집이 성이에요!',
-  },
-  {
-    'w1': 'house', 'w2': 'water',
-    'result': {'id': 'pool', 'text': '수영장', 'emoji': '🏊', 'category': 'object', 'level': 2},
-    'desc': '집에 물을 채운 곳이 수영장이에요!',
-  },
-  {
-    'w1': 'house', 'w2': 'snow',
-    'result': {'id': 'igloo', 'text': '이글루', 'emoji': '🏔️', 'category': 'object', 'level': 2},
-    'desc': '눈으로 만든 집이 이글루예요!',
-  },
-  {
-    'w1': 'house', 'w2': 'wind',
-    'result': {'id': 'windmill', 'text': '풍차', 'emoji': '🌬️', 'category': 'object', 'level': 2},
-    'desc': '바람의 힘으로 돌아가는 집이 풍차예요!',
-  },
-  {
-    'w1': 'house', 'w2': 'earth',
-    'result': {'id': 'cave', 'text': '동굴', 'emoji': '🕳️', 'category': 'object', 'level': 2},
-    'desc': '땅속에 있는 집 같은 곳이 동굴이에요!',
-  },
-  {
-    'w1': 'book', 'w2': 'fire',
-    'result': {'id': 'light', 'text': '지식', 'emoji': '💡', 'category': 'object', 'level': 2},
-    'desc': '책을 통해 빛나는 지식을 얻어요!',
-  },
-  {
-    'w1': 'book', 'w2': 'water',
-    'result': {'id': 'story', 'text': '이야기', 'emoji': '📖', 'category': 'object', 'level': 2},
-    'desc': '물처럼 흐르는 이야기가 책 속에 있어요!',
-  },
-  {
-    'w1': 'book', 'w2': 'wind',
-    'result': {'id': 'letter', 'text': '편지', 'emoji': '✉️', 'category': 'object', 'level': 2},
-    'desc': '바람에 날려가는 편지예요!',
-  },
-  {
-    'w1': 'book', 'w2': 'sun',
-    'result': {'id': 'map', 'text': '지도', 'emoji': '🗺️', 'category': 'object', 'level': 2},
-    'desc': '세상을 그린 책이 지도예요!',
-  },
-  {
-    'w1': 'stone', 'w2': 'fire',
-    'result': {'id': 'metal', 'text': '금속', 'emoji': '⚙️', 'category': 'object', 'level': 2},
-    'desc': '돌을 불로 녹이면 금속이 나와요!',
-  },
-  {
-    'w1': 'stone', 'w2': 'water',
-    'result': {'id': 'waterfall', 'text': '폭포', 'emoji': '💦', 'category': 'nature', 'level': 2},
-    'desc': '돌 사이로 물이 떨어지면 폭포가 돼요!',
-  },
-  {
-    'w1': 'stone', 'w2': 'earth',
-    'result': {'id': 'cave', 'text': '동굴', 'emoji': '🕳️', 'category': 'object', 'level': 2},
-    'desc': '돌과 흙이 쌓여 동굴이 생겨요!',
-  },
-  {
-    'w1': 'house', 'w2': 'bird',
-    'result': {'id': 'birdhouse', 'text': '새집', 'emoji': '🪹', 'category': 'object', 'level': 2},
-    'desc': '새가 사는 작은 집이 새집이에요!',
+    'result': {'id': 'stone_house', 'text': '돌집', 'emoji': '🏠', 'category': 'object', 'level': 2},
+    'desc': '돌을 쌓아 벽을 만들면 튼튼한 돌집을 지을 수 있어요.',
   },
   {
     'w1': 'house', 'w2': 'book',
     'result': {'id': 'library', 'text': '도서관', 'emoji': '📚', 'category': 'object', 'level': 2},
-    'desc': '책이 가득한 집이 도서관이에요!',
+    'desc': '책을 많이 모아 보관하고 읽는 집은 도서관이에요.',
   },
   {
     'w1': 'book', 'w2': 'earth',
     'result': {'id': 'map', 'text': '지도', 'emoji': '🗺️', 'category': 'object', 'level': 2},
-    'desc': '땅을 그린 책이 지도예요!',
+    'desc': '땅의 모양과 길을 책이나 종이에 그리면 지도가 돼요.',
+  },
+  {
+    'w1': 'sand', 'w2': 'fire',
+    'result': {'id': 'glass', 'text': '유리', 'emoji': '🪟', 'category': 'object', 'level': 3},
+    'desc': '모래의 주성분을 아주 높은 온도로 녹이면 유리를 만들 수 있어요.',
+  },
+  {
+    'w1': 'glass', 'w2': 'sun',
+    'result': {'id': 'lens', 'text': '렌즈', 'emoji': '🔍', 'category': 'object', 'level': 3},
+    'desc': '모양을 낸 유리는 햇빛을 모으거나 물체를 크게 보이게 하는 렌즈가 될 수 있어요.',
+  },
+  {
+    'w1': 'tree', 'w2': 'book',
+    'result': {'id': 'paper', 'text': '종이', 'emoji': '📄', 'category': 'object', 'level': 2},
+    'desc': '나무 섬유를 잘게 풀어 얇게 펴고 말리면 종이를 만들 수 있어요.',
+  },
+  {
+    'w1': 'paper', 'w2': 'book',
+    'result': {'id': 'notebook', 'text': '공책', 'emoji': '📓', 'category': 'object', 'level': 3},
+    'desc': '여러 장의 종이를 묶으면 글을 쓰는 공책이 돼요.',
+  },
+  {
+    'w1': 'wind', 'w2': 'house',
+    'result': {'id': 'windmill', 'text': '풍차', 'emoji': '🌬️', 'category': 'object', 'level': 2},
+    'desc': '바람의 힘으로 날개를 돌리는 장치를 풍차라고 해요.',
   },
 ];

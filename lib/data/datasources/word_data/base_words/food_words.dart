@@ -8,7 +8,7 @@ const List<Map<String, dynamic>> foodWords = [
   {'id': 'sugar',    'text': '설탕', 'emoji': '🍬', 'category': 'food'},
   {'id': 'salt',     'text': '소금', 'emoji': '🧂', 'category': 'food'},
   {'id': 'meat',     'text': '고기', 'emoji': '🥩', 'category': 'food'},
-  {'id': 'fish',     'text': '생선', 'emoji': '🐟', 'category': 'food'},
+  {'id': 'raw_fish', 'text': '생선', 'emoji': '🐟', 'category': 'food'},
   {'id': 'vegetable','text': '채소', 'emoji': '🥬', 'category': 'food'},
   {'id': 'fruit',    'text': '과일', 'emoji': '🍎', 'category': 'food'},
   {'id': 'bean',     'text': '콩',   'emoji': '🫘', 'category': 'food'},
