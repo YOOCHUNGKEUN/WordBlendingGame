@@ -1,3 +1,15 @@
+import java.io.FileInputStream
+import java.util.Properties
+
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
+fun signingProperty(name: String): String? = keystoreProperties.getProperty(name)
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -32,24 +44,41 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("dev") {
+            keyAlias = signingProperty("devKeyAlias")
+            keyPassword = signingProperty("devKeyPassword")
+            storeFile = signingProperty("devStoreFile")?.let { file(it) }
+            storePassword = signingProperty("devStorePassword")
+        }
+
+        create("prod") {
+            keyAlias = signingProperty("prodKeyAlias")
+            keyPassword = signingProperty("prodKeyPassword")
+            storeFile = signingProperty("prodStoreFile")?.let { file(it) }
+            storePassword = signingProperty("prodStorePassword")
+        }
+    }
+
     productFlavors {
         create("dev") {
             dimension = "app"
             applicationIdSuffix = ".dev"
             resValue("string", "app_name", "Dev단어팡")
+            signingConfig = signingConfigs.getByName("dev")
         }
 
         create("prod") {
             dimension = "app"
             resValue("string", "app_name", "단어팡")
+            signingConfig = signingConfigs.getByName("prod")
         }
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 }
