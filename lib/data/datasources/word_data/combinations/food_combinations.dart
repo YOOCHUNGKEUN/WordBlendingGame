@@ -79,4 +79,79 @@ const List<Map<String, dynamic>> foodCombinations = [
     'result': {'id': 'grilled_fish', 'text': '생선구이', 'emoji': '🐟', 'category': 'food', 'level': 2},
     'desc': '생선을 불에 익히면 생선구이가 돼요.',
   },
+  {
+    'w1': 'potato', 'w2': 'fire',
+    'result': {'id': 'baked_potato', 'text': '군감자', 'emoji': '🥔', 'category': 'food', 'level': 2},
+    'desc': '감자를 뜨겁게 익히면 포슬포슬한 군감자가 돼요.',
+  },
+  {
+    'w1': 'potato', 'w2': 'oil',
+    'result': {'id': 'fries', 'text': '감자튀김', 'emoji': '🍟', 'category': 'food', 'level': 2},
+    'desc': '감자를 기름에 튀기면 바삭한 감자튀김이 돼요.',
+  },
+  {
+    'w1': 'corn', 'w2': 'fire',
+    'result': {'id': 'popcorn', 'text': '팝콘', 'emoji': '🍿', 'category': 'food', 'level': 2},
+    'desc': '옥수수 알갱이를 뜨겁게 가열하면 안의 수분이 팽창해 팝콘이 돼요.',
+  },
+  {
+    'w1': 'tomato', 'w2': 'water',
+    'result': {'id': 'tomato_soup', 'text': '토마토 수프', 'emoji': '🍅', 'category': 'food', 'level': 2},
+    'desc': '토마토를 물과 함께 끓이면 토마토 수프를 만들 수 있어요.',
+  },
+  {
+    'w1': 'tomato', 'w2': 'salt',
+    'result': {'id': 'tomato_sauce', 'text': '토마토 소스', 'emoji': '🥫', 'category': 'food', 'level': 2},
+    'desc': '토마토에 소금을 넣고 졸이면 맛있는 소스가 돼요.',
+  },
+  {
+    'w1': 'yeast', 'w2': 'dough',
+    'result': {'id': 'risen_dough', 'text': '부푼 반죽', 'emoji': '🥣', 'category': 'food', 'level': 3},
+    'desc': '효모는 반죽 속에서 기체를 만들어 반죽을 부풀게 해요.',
+  },
+  {
+    'w1': 'risen_dough', 'w2': 'fire',
+    'result': {'id': 'soft_bread', 'text': '폭신한 빵', 'emoji': '🍞', 'category': 'food', 'level': 3},
+    'desc': '부푼 반죽을 구우면 폭신한 빵이 돼요.',
+  },
+  {
+    'w1': 'seaweed', 'w2': 'cooked_rice',
+    'result': {'id': 'kimbap', 'text': '김밥', 'emoji': '🍙', 'category': 'food', 'level': 3},
+    'desc': '밥을 김으로 감싸면 김밥을 만들 수 있어요.',
+  },
+  {
+    'w1': 'vinegar', 'w2': 'vegetable',
+    'result': {'id': 'pickle', 'text': '피클', 'emoji': '🥒', 'category': 'food', 'level': 2},
+    'desc': '채소를 식초에 절이면 새콤한 피클이 돼요.',
+  },
+  {
+    'w1': 'honey_base', 'w2': 'milk',
+    'result': {'id': 'honey_milk', 'text': '꿀우유', 'emoji': '🥛', 'category': 'food', 'level': 2},
+    'desc': '우유에 꿀을 섞으면 달콤한 꿀우유가 돼요.',
+  },
+  {
+    'w1': 'oil', 'w2': 'egg',
+    'result': {'id': 'mayonnaise_base', 'text': '마요네즈 재료', 'emoji': '🥚', 'category': 'food', 'level': 2},
+    'desc': '달걀과 기름은 마요네즈를 만드는 기본 재료예요.',
+  },
+  {
+    'w1': 'mayonnaise_base', 'w2': 'vinegar',
+    'result': {'id': 'mayonnaise', 'text': '마요네즈', 'emoji': '🥚', 'category': 'food', 'level': 3},
+    'desc': '달걀, 기름, 식초를 잘 섞으면 마요네즈가 돼요.',
+  },
+  {
+    'w1': 'flour', 'w2': 'egg',
+    'result': {'id': 'batter', 'text': '튀김옷', 'emoji': '🥣', 'category': 'food', 'level': 2},
+    'desc': '밀가루와 달걀을 섞으면 음식에 입히는 튀김옷을 만들 수 있어요.',
+  },
+  {
+    'w1': 'batter', 'w2': 'oil',
+    'result': {'id': 'fried_batter', 'text': '튀김', 'emoji': '🍤', 'category': 'food', 'level': 3},
+    'desc': '튀김옷을 입힌 재료를 기름에 익히면 바삭한 튀김이 돼요.',
+  },
+  {
+    'w1': 'grape', 'w2': 'sugar',
+    'result': {'id': 'grape_jam', 'text': '포도잼', 'emoji': '🍇', 'category': 'food', 'level': 2},
+    'desc': '포도에 설탕을 넣고 졸이면 포도잼을 만들 수 있어요.',
+  },
 ];

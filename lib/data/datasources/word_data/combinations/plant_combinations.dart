@@ -49,4 +49,64 @@ const List<Map<String, dynamic>> plantCombinations = [
     'result': {'id': 'nest', 'text': '새집', 'emoji': '🪹', 'category': 'object', 'level': 2},
     'desc': '새는 나뭇가지와 풀을 모아 둥지를 만들어요.',
   },
+  {
+    'w1': 'root_base', 'w2': 'water',
+    'result': {'id': 'water_absorption', 'text': '물 흡수', 'emoji': '💧', 'category': 'nature', 'level': 2},
+    'desc': '뿌리는 흙 속의 물을 빨아들여 식물에 보내요.',
+  },
+  {
+    'w1': 'root_base', 'w2': 'earth',
+    'result': {'id': 'rooted_plant', 'text': '뿌리내린 식물', 'emoji': '🪴', 'category': 'nature', 'level': 2},
+    'desc': '뿌리가 흙에 자리 잡으면 식물이 더 안정적으로 자라요.',
+  },
+  {
+    'w1': 'leaf_base', 'w2': 'sunlight',
+    'result': {'id': 'photosynthesis', 'text': '광합성', 'emoji': '🔆', 'category': 'nature', 'level': 3},
+    'desc': '잎은 햇빛을 이용해 물과 공기 중 이산화탄소로 양분을 만들어요.',
+  },
+  {
+    'w1': 'leaf_base', 'w2': 'air',
+    'result': {'id': 'leaf_breathing', 'text': '잎의 숨쉬기', 'emoji': '🍃', 'category': 'nature', 'level': 2},
+    'desc': '잎은 공기와 기체를 주고받으며 살아가요.',
+  },
+  {
+    'w1': 'bee', 'w2': 'flower',
+    'result': {'id': 'pollination', 'text': '꽃가루받이', 'emoji': '🐝', 'category': 'nature', 'level': 2},
+    'desc': '벌이 꽃을 오가며 꽃가루를 옮기면 꽃가루받이가 일어나요.',
+  },
+  {
+    'w1': 'butterfly', 'w2': 'flower',
+    'result': {'id': 'butterfly_garden', 'text': '나비 정원', 'emoji': '🦋', 'category': 'nature', 'level': 2},
+    'desc': '꽃이 많은 곳에는 꿀을 찾는 나비가 찾아올 수 있어요.',
+  },
+  {
+    'w1': 'compost', 'w2': 'seed',
+    'result': {'id': 'healthy_sprout', 'text': '튼튼한 새싹', 'emoji': '🌱', 'category': 'nature', 'level': 2},
+    'desc': '영양분이 있는 흙에서는 새싹이 더 튼튼하게 자랄 수 있어요.',
+  },
+  {
+    'w1': 'compost', 'w2': 'plant',
+    'result': {'id': 'healthy_plant', 'text': '건강한 식물', 'emoji': '🪴', 'category': 'nature', 'level': 3},
+    'desc': '퇴비의 영양분은 식물이 건강하게 자라는 데 도움을 줘요.',
+  },
+  {
+    'w1': 'branch', 'w2': 'leaf_base',
+    'result': {'id': 'leafy_branch', 'text': '잎 달린 가지', 'emoji': '🌿', 'category': 'nature', 'level': 2},
+    'desc': '가지에 잎이 달리면 햇빛을 더 많이 받을 수 있어요.',
+  },
+  {
+    'w1': 'branch', 'w2': 'flower',
+    'result': {'id': 'flowering_branch', 'text': '꽃가지', 'emoji': '🌸', 'category': 'nature', 'level': 2},
+    'desc': '가지 끝에 꽃이 피면 꽃가지가 돼요.',
+  },
+  {
+    'w1': 'worm', 'w2': 'compost',
+    'result': {'id': 'humus', 'text': '부식토', 'emoji': '🌱', 'category': 'nature', 'level': 2},
+    'desc': '지렁이는 낙엽과 퇴비가 흙으로 바뀌는 과정을 도와요.',
+  },
+  {
+    'w1': 'pollination', 'w2': 'flower',
+    'result': {'id': 'seed_pod', 'text': '씨앗주머니', 'emoji': '🌱', 'category': 'nature', 'level': 3},
+    'desc': '꽃가루받이가 된 꽃은 씨앗을 품는 열매나 씨앗주머니를 만들 수 있어요.',
+  },
 ];

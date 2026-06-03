@@ -13,4 +13,12 @@ const List<Map<String, dynamic>> foodWords = [
   {'id': 'fruit',    'text': '과일', 'emoji': '🍎', 'category': 'food'},
   {'id': 'bean',     'text': '콩',   'emoji': '🫘', 'category': 'food'},
   {'id': 'grape',    'text': '포도', 'emoji': '🍇', 'category': 'food'},
+  {'id': 'potato',   'text': '감자', 'emoji': '🥔', 'category': 'food'},
+  {'id': 'corn',     'text': '옥수수', 'emoji': '🌽', 'category': 'food'},
+  {'id': 'tomato',   'text': '토마토', 'emoji': '🍅', 'category': 'food'},
+  {'id': 'yeast',    'text': '효모', 'emoji': '🫧', 'category': 'food'},
+  {'id': 'oil',      'text': '기름', 'emoji': '🫗', 'category': 'food'},
+  {'id': 'seaweed',  'text': '김', 'emoji': '🟩', 'category': 'food'},
+  {'id': 'vinegar',  'text': '식초', 'emoji': '🧴', 'category': 'food'},
+  {'id': 'honey_base','text': '꿀', 'emoji': '🍯', 'category': 'food'},
 ];

@@ -61,16 +61,6 @@ class _WordPaletteState extends State<WordPalette> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // 드래그 핸들
-              // Container(
-              //   margin: const EdgeInsets.only(top: 10, bottom: 4),
-              //   width: 40,
-              //   height: 4,
-              //   decoration: BoxDecoration(
-              //     color: AppColors.primaryLight,
-              //     borderRadius: BorderRadius.circular(2),
-              //   ),
-              // ),
               // 헤더
               Padding(
                 padding:
