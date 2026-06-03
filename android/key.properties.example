@@ -1,0 +1,9 @@
+devStoreFile=D:/Chongfolder/keys/release_keys/wordpang_keys/wordpang-dev.jks
+devStorePassword=YOUR_DEV_STORE_PASSWORD
+devKeyAlias=wordpang_alias_dev
+devKeyPassword=YOUR_DEV_KEY_PASSWORD
+
+prodStoreFile=D:/Chongfolder/keys/release_keys/wordpang_keys/wordpang-prod.jks
+prodStorePassword=YOUR_PROD_STORE_PASSWORD
+prodKeyAlias=wordpang_alias
+prodKeyPassword=YOUR_PROD_KEY_PASSWORD
