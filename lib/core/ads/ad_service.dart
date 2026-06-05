@@ -47,6 +47,7 @@ class AdService {
       RequestConfiguration(
         maxAdContentRating: MaxAdContentRating.g,
         tagForChildDirectedTreatment: TagForChildDirectedTreatment.yes,
+        tagForUnderAgeOfConsent: TagForUnderAgeOfConsent.yes,
       ),
     );
     await MobileAds.instance.initialize();
@@ -129,7 +130,7 @@ class AdService {
         }
       },
     );
-    ad.setImmersiveMode(true);
+    ad.setImmersiveMode(false);
     ad.show(
       onUserEarnedReward: (ad, reward) {
         rewardEarned = true;
