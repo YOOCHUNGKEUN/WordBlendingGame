@@ -2,6 +2,10 @@
 
 A new Flutter project.
 
+## Project Notes
+
+- AGENTS.md is used as a local workspace instruction file and is excluded from git tracking.
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
