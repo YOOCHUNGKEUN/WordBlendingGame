@@ -2,12 +2,16 @@
 
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_strings.dart';
+import '../../domain/services/word_lookup_resolver.dart';
 import '../../domain/entities/word_combination.dart';
+import '../bloc/game_state.dart';
 
 /// 캔버스 합성 시 전체화면 팝업
 class CombinationResultPopup extends StatefulWidget {
   final WordCombination combination;
   final VoidCallback onDismiss;
+  final GameState state;
   final Map<String, String>? word1Info;
   final Map<String, String>? word2Info;
 
@@ -15,6 +19,7 @@ class CombinationResultPopup extends StatefulWidget {
     super.key,
     required this.combination,
     required this.onDismiss,
+    required this.state,
     this.word1Info,
     this.word2Info,
   });
@@ -74,16 +79,32 @@ class _CombinationResultPopupState extends State<CombinationResultPopup>
               ),
               child: WordCombinationCard(
                 combination: widget.combination,
-                badgeText: '팡! 새 단어 발견',
-                confirmLabel: '좋아! 계속 팡팡!',
-                word1Info: widget.word1Info,
-                word2Info: widget.word2Info,
+                badgeText: AppStrings.combinationResultBadge,
+                confirmLabel: AppStrings.combinationResultConfirm,
+                word1Info: widget.word1Info ??
+                    _resolver.findWordInfo(
+                      widget.combination.word1Id,
+                    ),
+                word2Info: widget.word2Info ??
+                    _resolver.findWordInfo(
+                      widget.combination.word2Id,
+                    ),
                 onConfirm: widget.onDismiss,
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  // 현재 게임 상태 기반으로 단어 표시 정보를 찾는 resolver를 만든다.
+  WordLookupResolver get _resolver {
+    return WordLookupResolver.fromGameState(
+      paletteWords: widget.state.paletteWords,
+      discoveredWords: widget.state.discoveredWords,
+      canvasWords: widget.state.canvasWords,
+      combinations: widget.state.allCombinations,
     );
   }
 }
@@ -341,8 +362,8 @@ void showWordCombinationDialog({
   required WordCombination combination,
   Map<String, String>? word1Info,
   Map<String, String>? word2Info,
-  String badgeText = '단어 정보',
-  String confirmLabel = '확인',
+  String badgeText = AppStrings.wordInfoBadge,
+  String confirmLabel = AppStrings.confirm,
 }) {
   showDialog(
     context: context,

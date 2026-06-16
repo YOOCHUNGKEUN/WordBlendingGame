@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/ads/ad_service.dart';
 import '../../core/constants/app_colors.dart';
@@ -39,7 +39,8 @@ class _GamePageState extends State<GamePage> {
         child: BlocBuilder<GameBloc, GameState>(
           builder: (context, state) {
             return Stack(
-              children: [Column(
+              children: [
+                Column(
                   children: [
                     _buildAppBar(context, state),
                     Expanded(child: const GameCanvas()),
@@ -55,15 +56,18 @@ class _GamePageState extends State<GamePage> {
                         children: [
                           CircularProgressIndicator(color: AppColors.primary),
                           const SizedBox(height: 16),
-                          const Text(AppStrings.calling_words),
+                          const Text(AppStrings.loadingWordsMessage),
                         ],
                       ),
                     ),
                   ),
                 if (state.showCombinationResult && state.lastCombination != null)
-                  CombinationResultPopup(combination: state.lastCombination!, onDismiss: () => context
+                  CombinationResultPopup(
+                    combination: state.lastCombination!,
+                    onDismiss: () => context
                         .read<GameBloc>()
                         .add(const CombinationResultDismissed()),
+                    state: state,
                   ),
               ],
             );
@@ -97,7 +101,7 @@ class _GamePageState extends State<GamePage> {
               child: Stack(
                 children: [
                   Text(
-                    AppStrings.alrchmey_word,
+                    AppStrings.appName,
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w900,
@@ -109,7 +113,7 @@ class _GamePageState extends State<GamePage> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    AppStrings.alrchmey_word,
+                    AppStrings.appName,
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w900,
@@ -176,7 +180,7 @@ class _GamePageState extends State<GamePage> {
                   const Text('📖', style: TextStyle(fontSize: 13)),
                   const SizedBox(width: 3),
                   Text(
-                    AppStrings.word_field_guide,
+                    AppStrings.recipeBookShortTitle,
                     style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
@@ -258,14 +262,14 @@ class _GamePageState extends State<GamePage> {
     if (result == _AdUnlockResult.success) {
       await AdService.instance.setAdsDisabled(true);
       messenger.showSnackBar(
-        const SnackBar(content: Text('광고 제외가 적용됐어요.')),
+        const SnackBar(content: Text(AppStrings.adUnlockApplied)),
       );
       return;
     }
 
     if (result == _AdUnlockResult.invalid) {
       messenger.showSnackBar(
-        const SnackBar(content: Text('코드가 맞지 않아요.')),
+        const SnackBar(content: Text(AppStrings.adUnlockInvalid)),
       );
     }
   }
@@ -276,19 +280,19 @@ class _GamePageState extends State<GamePage> {
       builder: (ctx) => AlertDialog(
         shape:
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('캔버스 지우기'),
-        content: const Text('캔버스의 모든 단어를 지울까요?\n팔레트의 단어는 그대로예요.'),
+        title: const Text(AppStrings.canvasDeleteTitle),
+        content: const Text(AppStrings.canvasDeleteContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('취소'),
+            child: const Text(AppStrings.cancel),
           ),
           TextButton(
             onPressed: () {
               context.read<GameBloc>().add(const CanvasCleared());
               Navigator.pop(ctx);
             },
-            child: const Text('지우기',
+            child: const Text(AppStrings.delete,
                 style: TextStyle(color: Colors.red)),
           ),
         ],
@@ -326,26 +330,27 @@ class _AdUnlockDialogState extends State<_AdUnlockDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: const Text('광고 제외 코드'),
+      title: const Text(AppStrings.adUnlockTitle),
       content: TextField(
         controller: _controller,
         autofocus: true,
         textInputAction: TextInputAction.done,
         onSubmitted: (_) => _submit(),
         decoration: const InputDecoration(
-          hintText: '코드를 입력하세요',
+          hintText: AppStrings.adUnlockHint,
         ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('취소'),
+          child: const Text(AppStrings.cancel),
         ),
         TextButton(
           onPressed: _submit,
-          child: const Text('확인'),
+          child: const Text(AppStrings.confirm),
         ),
       ],
     );
   }
 }
+

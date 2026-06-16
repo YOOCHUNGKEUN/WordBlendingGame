@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/ads/ad_service.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_strings.dart';
+import '../../domain/services/word_lookup_resolver.dart';
 import '../bloc/game_bloc.dart';
 import '../bloc/game_event.dart';
 import '../bloc/game_state.dart';
@@ -12,6 +14,7 @@ import 'hint_popup.dart';
 class HintWidget extends StatelessWidget {
   const HintWidget({super.key});
 
+  // 힌트 버튼을 누르면 광고 안내 후 보상형 광고를 요청한다.
   Future<void> _handleTap(BuildContext context) async {
     final shouldShowAd = await _showRewardedAdNotice(context);
     if (!shouldShowAd || !context.mounted) return;
@@ -27,32 +30,30 @@ class HintWidget extends StatelessWidget {
         if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('광고가 아직 준비되지 않았어요. 잠시 후 다시 시도해 주세요.'),
+            content: Text(AppStrings.hintAdUnavailable),
           ),
         );
       },
     );
   }
 
+  // 광고 시청 안내를 표시하고 사용자의 진행 여부를 반환한다.
   Future<bool> _showRewardedAdNotice(BuildContext context) async {
     final result = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('광고 시청 안내'),
-        content: const Text(
-          '힌트는 보상형 광고를 시청한 뒤 받을 수 있어요.\n\n'
-          '광고는 단어팡의 게임 내용이 아니며, 광고 화면으로 이동합니다.',
-        ),
+        title: const Text(AppStrings.hintAdNoticeTitle),
+        content: const Text(AppStrings.hintAdNoticeContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
-            child: const Text('취소'),
+            child: const Text(AppStrings.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(dialogContext, true),
-            child: const Text('광고 보고 힌트 받기'),
+            child: const Text(AppStrings.hintAdConfirm),
           ),
         ],
       ),
@@ -69,9 +70,18 @@ class HintWidget extends StatelessWidget {
           prev.hintCombination != curr.hintCombination,
       listener: (context, state) {
         // ✅ 팝업을 먼저 띄우고, 팝업 안에서 닫힐 때 HintDismissed 호출
+        final resolver = WordLookupResolver.fromGameState(
+          paletteWords: state.paletteWords,
+          discoveredWords: state.discoveredWords,
+          canvasWords: state.canvasWords,
+          combinations: state.allCombinations,
+        );
+
         showHintPopup(
           context,
           state.hintCombination!,
+          word1Info: resolver.findWordInfo(state.hintCombination!.word1Id),
+          word2Info: resolver.findWordInfo(state.hintCombination!.word2Id),
           onDismiss: () => context.read<GameBloc>().add(
             const HintDismissed(),
           ),
@@ -91,7 +101,7 @@ class HintWidget extends StatelessWidget {
               Text('💡', style: TextStyle(fontSize: 13)),
               SizedBox(width: 3),
               Text(
-                '광고 보고 힌트',
+                AppStrings.hintButton,
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w900,

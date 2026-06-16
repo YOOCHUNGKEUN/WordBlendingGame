@@ -1,4 +1,4 @@
-// lib/data/repositories/word_repository_impl.dart
+﻿// lib/data/repositories/word_repository_impl.dart
 
 import 'package:dartz/dartz.dart';
 import '../../core/constants/app_strings.dart';
@@ -20,7 +20,7 @@ class WordRepositoryImpl implements WordRepository {
       final words = await localDataSource.getBaseWords();
       return Right(words);
     } catch (e) {
-      return Left('${AppStrings.get_word_error}: $e');
+      return Left('${AppStrings.getWordError}: $e');
     }
   }
 
@@ -30,7 +30,7 @@ class WordRepositoryImpl implements WordRepository {
       final words = await localDataSource.getDiscoveredWords();
       return Right(words);
     } catch (e) {
-      return Left('${AppStrings.save_word_error}: $e');
+      return Left('${AppStrings.saveWordError}: $e');
     }
   }
 
@@ -46,7 +46,7 @@ class WordRepositoryImpl implements WordRepository {
       ));
       return const Right(unit);
     } catch (e) {
-      return Left('${AppStrings.save_word_failed}: $e');
+      return Left('${AppStrings.saveWordFailed}: $e');
     }
   }
 
@@ -58,7 +58,7 @@ class WordRepositoryImpl implements WordRepository {
       await localDataSource.getCombinationResult(word1Id, word2Id);
       return Right(result);
     } catch (e) {
-      return Left('${AppStrings.blending_failed_word}: $e');
+      return Left('${AppStrings.blendingFailedWord}: $e');
     }
   }
 
@@ -68,7 +68,7 @@ class WordRepositoryImpl implements WordRepository {
       final combos = await localDataSource.getAllCombinations();
       return Right(combos);
     } catch (e) {
-      return Left('${AppStrings.blending_failed_recipe}: $e');
+      return Left('${AppStrings.blendingFailedRecipe}: $e');
     }
   }
 
@@ -78,17 +78,17 @@ class WordRepositoryImpl implements WordRepository {
     try {
       final rawList = await localDataSource.getSavedCanvasWords();
       final canvasWords = rawList.map((map) {
-        final wordMap = map[AppStrings.mapkey_word] as Map<String, dynamic>;
+        final wordMap = map[AppStrings.mapKeyWord] as Map<String, dynamic>;
         return CanvasWord(
-          canvasId: map[AppStrings.mapkey_canvasId] as String,
-          x: (map[AppStrings.mapkey_x] as num).toDouble(),
-          y: (map[AppStrings.mapkey_y] as num).toDouble(),
+          canvasId: map[AppStrings.mapKeyCanvasId] as String,
+          x: (map[AppStrings.mapKeyX] as num).toDouble(),
+          y: (map[AppStrings.mapKeyY] as num).toDouble(),
           word: WordModel.fromMap(wordMap),
         );
       }).toList();
       return Right(canvasWords);
     } catch (e) {
-      return Left('${AppStrings.get_canvas_failed}: $e');
+      return Left('${AppStrings.getCanvasFailed}: $e');
     }
   }
 
@@ -99,7 +99,7 @@ class WordRepositoryImpl implements WordRepository {
       await localDataSource.saveCanvasWords(canvasWords);
       return const Right(unit);
     } catch (e) {
-      return Left('${AppStrings.save_canvas_failed}: $e');
+      return Left('${AppStrings.saveCanvasFailed}: $e');
     }
   }
 }

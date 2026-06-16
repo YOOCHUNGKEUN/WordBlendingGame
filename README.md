@@ -5,6 +5,9 @@ A new Flutter project.
 ## Project Notes
 
 - AGENTS.md is used as a local workspace instruction file and is excluded from git tracking.
+- The app follows a layered Flutter structure with `core`, `data`, `domain`, and `presentation`.
+- Presentation code should use domain entities/use cases instead of reading word data sources directly.
+- Shared UI text and storage/map keys are managed through `AppStrings`.
 
 ## Getting Started
 

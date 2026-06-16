@@ -1,4 +1,4 @@
-// lib/data/datasources/word_local_datasource.dart
+﻿// lib/data/datasources/word_local_datasource.dart
 
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,8 +21,8 @@ abstract class WordLocalDataSource {
 
 class WordLocalDataSourceImpl implements WordLocalDataSource {
   final SharedPreferences sharedPreferences;
-  static const String _discoveredKey = AppStrings.shefkey_discovered_words;
-  static const String _canvasKey = AppStrings.shefkey_canvas_words; // 캔버스 저장 키
+  static const String _discoveredKey = AppStrings.sharedKeyDiscoveredWords;
+  static const String _canvasKey = AppStrings.sharedKeyCanvasWords; // 캔버스 저장 키
 
   WordLocalDataSourceImpl(this.sharedPreferences);
 
@@ -54,17 +54,17 @@ class WordLocalDataSourceImpl implements WordLocalDataSource {
   Future<WordCombination?> getCombinationResult(
       String word1Id, String word2Id) async {
     for (final combo in WordDataRegistry.combinations) {
-      final w1 = combo[AppStrings.combo_w1] as String;
-      final w2 = combo[AppStrings.combo_w2] as String;
+      final w1 = combo[AppStrings.comboWord1] as String;
+      final w2 = combo[AppStrings.comboWord2] as String;
       if ((w1 == word1Id && w2 == word2Id) ||
           (w1 == word2Id && w2 == word1Id)) {
-        final resultMap = combo[AppStrings.combo_result] as Map<String, dynamic>;
+        final resultMap = combo[AppStrings.comboResult] as Map<String, dynamic>;
         final resultWord = WordModel.fromMap(resultMap);
         return WordCombination(
           word1Id: word1Id,
           word2Id: word2Id,
           result: resultWord,
-          description: combo[AppStrings.combo_desc] as String,
+          description: combo[AppStrings.comboDescription] as String,
         );
       }
     }
@@ -74,13 +74,13 @@ class WordLocalDataSourceImpl implements WordLocalDataSource {
   @override
   Future<List<WordCombination>> getAllCombinations() async {
     return WordDataRegistry.combinations.map((combo) {
-      final resultMap = combo[AppStrings.combo_result] as Map<String, dynamic>;
+      final resultMap = combo[AppStrings.comboResult] as Map<String, dynamic>;
       final resultWord = WordModel.fromMap(resultMap);
       return WordCombination(
-        word1Id: combo[AppStrings.combo_w1] as String,
-        word2Id: combo[AppStrings.combo_w2] as String,
+        word1Id: combo[AppStrings.comboWord1] as String,
+        word2Id: combo[AppStrings.comboWord2] as String,
         result: resultWord,
-        description: combo[AppStrings.combo_desc] as String,
+        description: combo[AppStrings.comboDescription] as String,
       );
     }).toList();
   }
@@ -97,10 +97,10 @@ class WordLocalDataSourceImpl implements WordLocalDataSource {
   @override
   Future<void> saveCanvasWords(List<CanvasWord> canvasWords) async {
     final jsonList = canvasWords.map((cw) => {
-      AppStrings.mapkey_canvasId: cw.canvasId,
-      AppStrings.mapkey_x: cw.x,
-      AppStrings.mapkey_y: cw.y,
-      AppStrings.mapkey_word: WordModel(
+      AppStrings.mapKeyCanvasId: cw.canvasId,
+      AppStrings.mapKeyX: cw.x,
+      AppStrings.mapKeyY: cw.y,
+      AppStrings.mapKeyWord: WordModel(
         id: cw.word.id,
         text: cw.word.text,
         emoji: cw.word.emoji,

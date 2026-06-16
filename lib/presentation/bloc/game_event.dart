@@ -1,7 +1,6 @@
 // lib/presentation/bloc/game_event.dart
 
 import 'package:equatable/equatable.dart';
-import '../../domain/entities/canvas_word.dart';
 import '../../domain/entities/word.dart';
 
 abstract class GameEvent extends Equatable {

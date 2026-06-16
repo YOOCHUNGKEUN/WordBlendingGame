@@ -2,11 +2,11 @@
 
 import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/datasources/word_data/word_data_registry.dart';
 import '../../domain/entities/canvas_word.dart';
 import '../../domain/entities/word.dart';
 import '../../domain/entities/word_combination.dart';
 import '../../domain/usecases/combine_words_usecase.dart';
+import '../../domain/usecases/get_all_combinations_usecase.dart';
 import '../../domain/usecases/get_base_words_usecase.dart';
 import '../../domain/usecases/get_canvas_words_usecase.dart';
 import '../../domain/usecases/get_discovered_words_usecase.dart';
@@ -20,6 +20,7 @@ const double _cardH = 52.0;
 
 class GameBloc extends Bloc<GameEvent, GameState> {
   final GetBaseWordsUseCase getBaseWordsUseCase;
+  final GetAllCombinationsUseCase getAllCombinationsUseCase;
   final CombineWordsUseCase combineWordsUseCase;
   final SaveDiscoveredWordUseCase saveDiscoveredWordUseCase;
   final GetDiscoveredWordsUseCase getDiscoveredWordsUseCase;
@@ -28,6 +29,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   GameBloc({
     required this.getBaseWordsUseCase,
+    required this.getAllCombinationsUseCase,
     required this.combineWordsUseCase,
     required this.saveDiscoveredWordUseCase,
     required this.getDiscoveredWordsUseCase,
@@ -65,6 +67,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final discoveredResult = await getDiscoveredWordsUseCase();
     final discoveredWords = discoveredResult.getOrElse(() => []);
 
+    final combinationsResult = await getAllCombinationsUseCase();
+    final allCombinations = combinationsResult.getOrElse(() => []);
+
     final extraWords = discoveredWords
         .where((d) => !baseWords.any((b) => b.id == d.id))
         .toList();
@@ -77,6 +82,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       status: GameStatus.ready,
       paletteWords: paletteWords,
       discoveredWords: discoveredWords,
+      allCombinations: allCombinations,
       canvasWords: canvasWords,
     ));
   }
@@ -300,26 +306,24 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   // ── 힌트 요청 ─────────────────────────────────────────────
   void _onHintRequested(HintRequested event, Emitter<GameState> emit) {
-    final allCombinations = WordDataRegistry.combinations;
+    final allCombinations = state.allCombinations;
     final discoveredIds = state.discoveredWords.map((w) => w.id).toSet();
     final availableIds = {
       ...state.paletteWords.map((w) => w.id),
       ...state.canvasWords.map((cw) => cw.word.id),
     };
 
-    List<Map<String, dynamic>> candidates = allCombinations.where((combo) {
-      final resultId =
-      (combo['result'] as Map<String, dynamic>)['id'] as String;
+    List<WordCombination> candidates = allCombinations.where((combo) {
+      final resultId = combo.result.id;
       return !discoveredIds.contains(resultId);
     }).toList();
 
     if (candidates.isEmpty) {
-      candidates = List<Map<String, dynamic>>.from(allCombinations);
+      candidates = List<WordCombination>.from(allCombinations);
     }
 
     final unseenCandidates = candidates.where((combo) {
-      final resultId =
-      (combo['result'] as Map<String, dynamic>)['id'] as String;
+      final resultId = combo.result.id;
       return !state.shownHintIds.contains(resultId);
     }).toList();
 
@@ -337,49 +341,31 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       final scoreB = _hintScore(b, availableIds, discoveredIds);
       if (scoreA != scoreB) return scoreA.compareTo(scoreB);
 
-      final levelA = ((a['result'] as Map<String, dynamic>)['level'] as int?) ?? 1;
-      final levelB = ((b['result'] as Map<String, dynamic>)['level'] as int?) ?? 1;
+      final levelA = a.result.level;
+      final levelB = b.result.level;
       return levelA.compareTo(levelB);
     });
 
     final picked = candidates.first;
-    final resultMap = picked['result'] as Map<String, dynamic>;
-    final resultId = resultMap['id'] as String;
-
-    final hint = WordCombination(
-      word1Id: picked['w1'] as String,
-      word2Id: picked['w2'] as String,
-      result: Word(
-        id: resultId,
-        text: resultMap['text'] as String,
-        emoji: resultMap['emoji'] as String,
-        category: WordCategory.values.firstWhere(
-              (e) => e.name == resultMap['category'],
-          orElse: () => WordCategory.object,
-        ),
-        level: resultMap['level'] as int? ?? 1,
-      ),
-      description: picked['desc'] as String,
-    );
+    final resultId = picked.result.id;
 
     newShownIds = <String>[...newShownIds, resultId];
 
     emit(state.copyWith(
-      hintCombination: hint,
+      hintCombination: picked,
       shownHintIds: newShownIds,
     ));
   }
 
   int _hintScore(
-    Map<String, dynamic> combo,
+    WordCombination combo,
     Set<String> availableIds,
     Set<String> discoveredIds,
   ) {
-    final w1 = combo['w1'] as String;
-    final w2 = combo['w2'] as String;
-    final resultMap = combo['result'] as Map<String, dynamic>;
-    final resultId = resultMap['id'] as String;
-    final resultLevel = resultMap['level'] as int? ?? 1;
+    final w1 = combo.word1Id;
+    final w2 = combo.word2Id;
+    final resultId = combo.result.id;
+    final resultLevel = combo.result.level;
 
     var score = resultLevel * 10;
 
@@ -421,7 +407,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       final overlapX = (_cardW - (x - other.x).abs()).clamp(0.0, _cardW);
       final overlapY = (_cardH - (y - other.y).abs()).clamp(0.0, _cardH);
       final overlapArea = overlapX * overlapY;
-      final cardArea = _cardW * _cardH;
+      const cardArea = _cardW * _cardH;
 
       if (overlapArea / cardArea >= 0.5 && overlapArea > bestOverlap) {
         bestOverlap = overlapArea;

@@ -3,13 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_strings.dart';
 import '../../domain/entities/word.dart';
 import '../../domain/entities/word_combination.dart';
+import '../../domain/services/word_lookup_resolver.dart';
 import '../../core/theme/app_theme.dart';
 import '../bloc/game_bloc.dart';
 import '../bloc/game_state.dart';
 import '../widgets/combination_result_popup.dart';
-import '../../data/datasources/word_data/word_data_registry.dart';
 
 class RecipeBookPage extends StatelessWidget {
   const RecipeBookPage({super.key});
@@ -32,7 +33,7 @@ class RecipeBookPage extends StatelessWidget {
               onPressed: () => Navigator.pop(context),
             ),
             title: Text(
-              '단어팡 도감',
+              AppStrings.recipeBookTitle,
               style: TextStyle(
                 color: AppColors.titleBlue,
                 fontWeight: FontWeight.w900,
@@ -56,8 +57,10 @@ class RecipeBookPage extends StatelessWidget {
                     childAspectRatio: 1.1,
                   ),
                   itemCount: discovered.length,
-                  itemBuilder: (context, index) =>
-                      _WordTile(word: discovered[index]),
+                  itemBuilder: (context, index) => _WordTile(
+                    word: discovered[index],
+                    state: state,
+                  ),
                 ),
               ),
             ],
@@ -71,56 +74,34 @@ class RecipeBookPage extends StatelessWidget {
 // ── 타일 ──────────────────────────────────────────────────
 class _WordTile extends StatelessWidget {
   final Word word;
-  const _WordTile({required this.word});
+  final GameState state;
+
+  const _WordTile({
+    required this.word,
+    required this.state,
+  });
 
   Color get _bgColor => AppTheme.categoryColors[word.category.name] ?? AppColors.primaryLight;
-
-  WordCombination? _findRecipe() {
-    for (final combo in WordDataRegistry.combinations) {
-      final resultMap = combo['result'] as Map<String, dynamic>;
-      if (resultMap['id'] == word.id) {
-        return WordCombination(
-          word1Id: combo['w1'] as String,
-          word2Id: combo['w2'] as String,
-          result: word,
-          description: combo['desc'] as String,
-        );
-      }
-    }
-    return null;
-  }
-
-  Map<String, String> _findWordInfo(String id) {
-    for (final w in WordDataRegistry.baseWords) {
-      if (w['id'] == id) {
-        return {'text': w['text'] as String, 'emoji': w['emoji'] as String};
-      }
-    }
-    for (final combo in WordDataRegistry.combinations) {
-      final result = combo['result'] as Map<String, dynamic>;
-      if (result['id'] == id) {
-        return {
-          'text': result['text'] as String,
-          'emoji': result['emoji'] as String,
-        };
-      }
-    }
-    return {'text': id, 'emoji': '❓'};
-  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        final recipe = _findRecipe();
+        final resolver = WordLookupResolver.fromGameState(
+          paletteWords: state.paletteWords,
+          discoveredWords: state.discoveredWords,
+          canvasWords: state.canvasWords,
+          combinations: state.allCombinations,
+        );
+        final recipe = resolver.findRecipeForWord(word);
 
         if (recipe != null) {
           // 합성 단어 → 공용 다이얼로그
           showWordCombinationDialog(
             context: context,
             combination: recipe,
-            word1Info: _findWordInfo(recipe.word1Id),
-            word2Info: _findWordInfo(recipe.word2Id),
+            word1Info: resolver.findWordInfo(recipe.word1Id),
+            word2Info: resolver.findWordInfo(recipe.word2Id),
           );
         } else {
           // 기본 단어 → 간단 안내
@@ -130,10 +111,10 @@ class _WordTile extends StatelessWidget {
               word1Id: '',
               word2Id: '',
               result: word,
-              description: '기본 단어예요! 다른 단어와 합쳐보세요. ✨',
+              description: AppStrings.baseWordDescription,
             ),
-            badgeText: '⭐ 기본 단어',
-            confirmLabel: '알겠어요!',
+            badgeText: AppStrings.baseWordBadge,
+            confirmLabel: AppStrings.baseWordConfirm,
           );
         }
       },
@@ -275,7 +256,7 @@ class _EmptyState extends StatelessWidget {
           const Text('🔍', style: TextStyle(fontSize: 64)),
           const SizedBox(height: 16),
           Text(
-            '아직 합성 단어가 없어요!',
+            AppStrings.emptyRecipeTitle,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
@@ -284,7 +265,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '단어 카드를 서로 합쳐보세요 ✨',
+            AppStrings.emptyRecipeDescription,
             style: TextStyle(fontSize: 13, color: AppColors.textLight),
           ),
         ],

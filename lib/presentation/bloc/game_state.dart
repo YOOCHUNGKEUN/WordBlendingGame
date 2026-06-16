@@ -12,6 +12,7 @@ class GameState extends Equatable {
   final List<Word> paletteWords;
   final List<CanvasWord> canvasWords;
   final List<Word> discoveredWords;
+  final List<WordCombination> allCombinations;
   final WordCombination? lastCombination;
   final bool showCombinationResult;
   final String? errorMessage;
@@ -23,6 +24,7 @@ class GameState extends Equatable {
     this.paletteWords = const [],
     this.canvasWords = const [],
     this.discoveredWords = const [],
+    this.allCombinations = const [],
     this.lastCombination,
     this.showCombinationResult = false,
     this.errorMessage,
@@ -35,6 +37,7 @@ class GameState extends Equatable {
     List<Word>? paletteWords,
     List<CanvasWord>? canvasWords,
     List<Word>? discoveredWords,
+    List<WordCombination>? allCombinations,
     WordCombination? lastCombination,
     bool? showCombinationResult,
     String? errorMessage,
@@ -48,6 +51,7 @@ class GameState extends Equatable {
       paletteWords: paletteWords ?? this.paletteWords,
       canvasWords: canvasWords ?? this.canvasWords,
       discoveredWords: discoveredWords ?? this.discoveredWords,
+      allCombinations: allCombinations ?? this.allCombinations,
       lastCombination: clearLastCombination
           ? null
           : (lastCombination ?? this.lastCombination),
@@ -66,6 +70,7 @@ class GameState extends Equatable {
     paletteWords,
     canvasWords,
     discoveredWords,
+    allCombinations,
     lastCombination,
     showCombinationResult,
     errorMessage,

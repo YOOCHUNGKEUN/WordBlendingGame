@@ -2,17 +2,16 @@
 
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
-import '../../data/datasources/word_data/word_data_registry.dart';
+import '../../core/constants/app_strings.dart';
 import '../../domain/entities/word_combination.dart';
 
 void showHintPopup(
     BuildContext context,
     WordCombination hint, {
+      required Map<String, String> word1Info,
+      required Map<String, String> word2Info,
       required VoidCallback onDismiss, // ✅ 닫기 콜백 추가
     }) {
-  final w1Info = _findWordInfo(hint.word1Id);
-  final w2Info = _findWordInfo(hint.word2Id);
-
   showDialog(
     context: context,
     builder: (ctx) => Dialog(
@@ -35,7 +34,7 @@ void showHintPopup(
                 border: Border.all(color: Colors.white, width: 2),
               ),
               child: const Text(
-                '이 조합 어때요?',
+                AppStrings.hintPopupBadge,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 13,
@@ -49,7 +48,12 @@ void showHintPopup(
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Flexible(child: _ingredientChip(w1Info['emoji']!, w1Info['text']!)),
+                Flexible(
+                  child: _ingredientChip(
+                    word1Info['emoji']!,
+                    word1Info['text']!,
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
@@ -61,7 +65,12 @@ void showHintPopup(
                     ),
                   ),
                 ),
-                Flexible(child: _ingredientChip(w2Info['emoji']!, w2Info['text']!)),
+                Flexible(
+                  child: _ingredientChip(
+                    word2Info['emoji']!,
+                    word2Info['text']!,
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
@@ -110,7 +119,7 @@ void showHintPopup(
                 border: Border.all(color: AppColors.accent.withOpacity(0.5)),
               ),
               child: Text(
-                '이 두 단어를 캔버스에서 합쳐보세요!\n무엇이 팡 하고 나올까요?',
+                AppStrings.hintPopupGuide,
                 style: TextStyle(
                   fontSize: 13,
                   color: Colors.grey.shade700,
@@ -149,7 +158,7 @@ void showHintPopup(
                     ],
                   ),
                   child: const Text(
-                    '도전해볼게요!',
+                    AppStrings.hintPopupConfirm,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
@@ -197,20 +206,3 @@ Widget _ingredientChip(String emoji, String text) {
   );
 }
 
-Map<String, String> _findWordInfo(String id) {
-  for (final w in WordDataRegistry.baseWords) {
-    if (w['id'] == id) {
-      return {'text': w['text'] as String, 'emoji': w['emoji'] as String};
-    }
-  }
-  for (final combo in WordDataRegistry.combinations) {
-    final result = combo['result'] as Map<String, dynamic>;
-    if (result['id'] == id) {
-      return {
-        'text': result['text'] as String,
-        'emoji': result['emoji'] as String,
-      };
-    }
-  }
-  return {'text': id, 'emoji': '❓'};
-}

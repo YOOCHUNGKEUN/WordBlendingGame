@@ -2,10 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/datasources/word_data/word_data_registry.dart';
+import '../../core/constants/app_strings.dart';
 import '../../domain/entities/canvas_word.dart';
 import '../../domain/entities/word.dart';
 import '../../domain/entities/word_combination.dart';
+import '../../domain/services/word_lookup_resolver.dart';
 import '../bloc/game_bloc.dart';
 import '../bloc/game_event.dart';
 import '../bloc/game_state.dart';
@@ -107,7 +108,7 @@ class _GameCanvasState extends State<GameCanvas> {
                           children: [
                             _buildGridBackground(),
                             ...state.canvasWords.map(
-                                  (cw) => _buildDraggableWord(context, cw),
+                                  (cw) => _buildDraggableWord(context, state, cw),
                             ),
                           ],
                         ),
@@ -130,12 +131,16 @@ class _GameCanvasState extends State<GameCanvas> {
     );
   }
 
-  Widget _buildDraggableWord(BuildContext context, CanvasWord canvasWord) {
+  Widget _buildDraggableWord(
+    BuildContext context,
+    GameState state,
+    CanvasWord canvasWord,
+  ) {
     return Positioned(
       left: canvasWord.x - _cardW / 2,
       top: canvasWord.y - _cardH / 2,
       child: GestureDetector(
-        onTap: () => _showWordInfo(context, canvasWord.word),
+        onTap: () => _showWordInfo(context, state, canvasWord.word),
         onPanStart: (details) {
           final fingerCanvasPos =
           _globalToCanvas(details.globalPosition);
@@ -189,15 +194,22 @@ class _GameCanvasState extends State<GameCanvas> {
     );
   }
 
-  void _showWordInfo(BuildContext context, Word word) {
-    final recipe = _findRecipe(word);
+  // 캔버스 단어를 탭했을 때 단어 정보 팝업을 표시한다.
+  void _showWordInfo(BuildContext context, GameState state, Word word) {
+    final resolver = WordLookupResolver.fromGameState(
+      paletteWords: state.paletteWords,
+      discoveredWords: state.discoveredWords,
+      canvasWords: state.canvasWords,
+      combinations: state.allCombinations,
+    );
+    final recipe = resolver.findRecipeForWord(word);
 
     if (recipe != null) {
       showWordCombinationDialog(
         context: context,
         combination: recipe,
-        word1Info: _findWordInfo(recipe.word1Id),
-        word2Info: _findWordInfo(recipe.word2Id),
+        word1Info: resolver.findWordInfo(recipe.word1Id),
+        word2Info: resolver.findWordInfo(recipe.word2Id),
       );
       return;
     }
@@ -208,44 +220,11 @@ class _GameCanvasState extends State<GameCanvas> {
         word1Id: '',
         word2Id: '',
         result: word,
-        description: '기본 단어예요! 다른 단어와 합쳐보세요. ✨',
+        description: AppStrings.baseWordDescription,
       ),
-      badgeText: '⭐ 기본 단어',
-      confirmLabel: '알겠어요!',
+      badgeText: AppStrings.baseWordBadge,
+      confirmLabel: AppStrings.baseWordConfirm,
     );
-  }
-
-  WordCombination? _findRecipe(Word word) {
-    for (final combo in WordDataRegistry.combinations) {
-      final resultMap = combo['result'] as Map<String, dynamic>;
-      if (resultMap['id'] == word.id) {
-        return WordCombination(
-          word1Id: combo['w1'] as String,
-          word2Id: combo['w2'] as String,
-          result: word,
-          description: combo['desc'] as String,
-        );
-      }
-    }
-    return null;
-  }
-
-  Map<String, String> _findWordInfo(String id) {
-    for (final w in WordDataRegistry.baseWords) {
-      if (w['id'] == id) {
-        return {'text': w['text'] as String, 'emoji': w['emoji'] as String};
-      }
-    }
-    for (final combo in WordDataRegistry.combinations) {
-      final result = combo['result'] as Map<String, dynamic>;
-      if (result['id'] == id) {
-        return {
-          'text': result['text'] as String,
-          'emoji': result['emoji'] as String,
-        };
-      }
-    }
-    return {'text': id, 'emoji': '❓'};
   }
 
   void _showDeleteDialog(BuildContext context, CanvasWord canvasWord) {
@@ -256,11 +235,11 @@ class _GameCanvasState extends State<GameCanvas> {
             borderRadius: BorderRadius.circular(20)),
         title:
         Text('${canvasWord.word.emoji} ${canvasWord.word.text}'),
-        content: const Text('이 단어를 지울까요?'),
+        content: const Text(AppStrings.deleteWordContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('취소'),
+            child: const Text(AppStrings.cancel),
           ),
           TextButton(
             onPressed: () {
@@ -268,7 +247,7 @@ class _GameCanvasState extends State<GameCanvas> {
                   CanvasWordDeleted(canvasId: canvasWord.canvasId));
               Navigator.pop(ctx);
             },
-            child: const Text('지우기',
+            child: const Text(AppStrings.delete,
                 style: TextStyle(color: Colors.red)),
           ),
         ],

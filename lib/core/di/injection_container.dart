@@ -7,6 +7,7 @@ import '../../data/datasources/word_local_datasource.dart';
 import '../../data/repositories/word_repository_impl.dart';
 import '../../domain/repositories/word_repository.dart';
 import '../../domain/usecases/combine_words_usecase.dart';
+import '../../domain/usecases/get_all_combinations_usecase.dart';
 import '../../domain/usecases/get_base_words_usecase.dart';
 import '../../domain/usecases/get_canvas_words_usecase.dart';
 import '../../domain/usecases/get_discovered_words_usecase.dart';
@@ -24,6 +25,7 @@ Future<void> init() async {
   sl.registerLazySingleton<WordLocalDataSource>(() => WordLocalDataSourceImpl(sl()));
   sl.registerLazySingleton<WordRepository>(() => WordRepositoryImpl(sl()));
   sl.registerLazySingleton(() => GetBaseWordsUseCase(sl()));
+  sl.registerLazySingleton(() => GetAllCombinationsUseCase(sl()));
   sl.registerLazySingleton(() => CombineWordsUseCase(sl()));
   sl.registerLazySingleton(() => SaveDiscoveredWordUseCase(sl()));
   sl.registerLazySingleton(() => GetDiscoveredWordsUseCase(sl()));
@@ -32,6 +34,7 @@ Future<void> init() async {
 
   sl.registerFactory(() => GameBloc(
       getBaseWordsUseCase: sl(),
+      getAllCombinationsUseCase: sl(),
       combineWordsUseCase: sl(),
       saveDiscoveredWordUseCase: sl(),
       getDiscoveredWordsUseCase: sl(),
