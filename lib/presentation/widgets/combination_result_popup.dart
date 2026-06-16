@@ -67,7 +67,7 @@ class _CombinationResultPopupState extends State<CombinationResultPopup>
     return GestureDetector(
       onTap: widget.onDismiss,
       child: Container(
-        color: Colors.black.withOpacity(0.45),
+        color: Colors.black.withValues(alpha: 0.45),
         child: Center(
           child: ScaleTransition(
             scale: _scaleAnim,
@@ -143,7 +143,7 @@ class WordCombinationCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.25),
+            color: AppColors.primary.withValues(alpha: 0.25),
             blurRadius: 40,
             spreadRadius: 4,
             offset: const Offset(0, 8),
@@ -187,7 +187,10 @@ class WordCombinationCard extends StatelessWidget {
               color: AppColors.primaryLight,
               borderRadius: BorderRadius.circular(20),
               border:
-              Border.all(color: AppColors.titleBlue.withOpacity(0.3), width: 2),
+              Border.all(
+                color: AppColors.titleBlue.withValues(alpha: 0.3),
+                width: 2,
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -218,7 +221,9 @@ class WordCombinationCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.amber.shade50,
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppColors.accent.withOpacity(0.5)),
+              border: Border.all(
+                color: AppColors.accent.withValues(alpha: 0.5),
+              ),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,7 +260,7 @@ class WordCombinationCard extends StatelessWidget {
                   border: Border.all(color: AppColors.accent, width: 2),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(0.35),
+                      color: AppColors.primary.withValues(alpha: 0.35),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),

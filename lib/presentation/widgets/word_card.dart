@@ -45,12 +45,12 @@ class WordCard extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.titleBlue.withOpacity(0.16),
+              color: AppColors.titleBlue.withValues(alpha: 0.16),
               blurRadius: isOnCanvas ? 10 : 7,
               offset: const Offset(0, 4),
             ),
             BoxShadow(
-              color: Colors.white.withOpacity(0.75),
+              color: Colors.white.withValues(alpha: 0.75),
               blurRadius: 0,
               offset: const Offset(0, -2),
             ),

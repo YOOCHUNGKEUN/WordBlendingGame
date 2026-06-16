@@ -90,7 +90,7 @@ void showHintPopup(
                   color: AppColors.primaryLight,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                      color: AppColors.titleBlue.withOpacity(0.3),
+                      color: AppColors.titleBlue.withValues(alpha: 0.3),
                       width: 2,
                     ),
                   ),
@@ -116,7 +116,9 @@ void showHintPopup(
               decoration: BoxDecoration(
                 color: Colors.amber.shade50,
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColors.accent.withOpacity(0.5)),
+                border: Border.all(
+                  color: AppColors.accent.withValues(alpha: 0.5),
+                ),
               ),
               child: Text(
                 AppStrings.hintPopupGuide,
@@ -151,7 +153,7 @@ void showHintPopup(
                     border: Border.all(color: AppColors.accent, width: 2),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.amber.withOpacity(0.4),
+                        color: Colors.amber.withValues(alpha: 0.4),
                         blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),

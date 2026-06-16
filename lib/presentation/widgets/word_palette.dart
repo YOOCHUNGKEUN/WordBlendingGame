@@ -52,7 +52,7 @@ class _WordPaletteState extends State<WordPalette> {
             const BorderRadius.vertical(top: Radius.circular(24)),
             boxShadow: [
               BoxShadow(
-                color: AppColors.titleBlue.withOpacity(0.16),
+                color: AppColors.titleBlue.withValues(alpha: 0.16),
                 blurRadius: 22,
                 offset: const Offset(0, -5),
               ),
@@ -178,7 +178,7 @@ class _ScrollIndicatorBar extends StatelessWidget {
                 width: thumbWidth,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.5),
+                  color: AppColors.primary.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),

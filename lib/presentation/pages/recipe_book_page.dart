@@ -125,7 +125,7 @@ class _WordTile extends StatelessWidget {
           border: Border.all(color: Colors.white, width: 2),
           boxShadow: [
             BoxShadow(
-              color: AppColors.titleBlue.withOpacity(0.14),
+              color: AppColors.titleBlue.withValues(alpha: 0.14),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -151,7 +151,7 @@ class _WordTile extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.6),
+                  color: Colors.white.withValues(alpha: 0.6),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -188,7 +188,7 @@ class _ProgressBanner extends StatelessWidget {
         border: Border.all(color: AppColors.accent, width: 2),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -213,7 +213,7 @@ class _ProgressBanner extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                   child: LinearProgressIndicator(
                     value: progress,
-                    backgroundColor: Colors.white.withOpacity(0.3),
+                    backgroundColor: Colors.white.withValues(alpha: 0.3),
                     valueColor:
                     const AlwaysStoppedAnimation<Color>(Colors.white),
                     minHeight: 8,
@@ -223,7 +223,7 @@ class _ProgressBanner extends StatelessWidget {
                 Text(
                   '전체 $total개 중',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                     fontSize: 12,
                   ),
                 ),

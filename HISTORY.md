@@ -1,5 +1,9 @@
 # HISTORY
 
+## 2026-06-17
+
+- Deprecated Flutter APIs were replaced: `withOpacity`, `ColorScheme.background`, and `Matrix4.translate`.
+
 ## 2026-06-16
 
 - 단어 조합 전체 조회 usecase와 단어 표시 정보 resolver를 추가했습니다.

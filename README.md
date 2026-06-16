@@ -8,6 +8,7 @@ A new Flutter project.
 - The app follows a layered Flutter structure with `core`, `data`, `domain`, and `presentation`.
 - Presentation code should use domain entities/use cases instead of reading word data sources directly.
 - Shared UI text and storage/map keys are managed through `AppStrings`.
+- Deprecated Flutter color/transform APIs should use current replacements such as `withValues` and `translateByDouble`.
 
 ## Getting Started
 

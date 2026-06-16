@@ -49,7 +49,7 @@ class _GamePageState extends State<GamePage> {
                 ),
                 if (state.status == GameStatus.loading)
                   Container(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                     child: Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -85,7 +85,7 @@ class _GamePageState extends State<GamePage> {
         color: AppColors.background,
         boxShadow: [
           BoxShadow(
-            color: AppColors.success.withOpacity(0.18),
+            color: AppColors.success.withValues(alpha: 0.18),
             blurRadius: 14,
             offset: const Offset(0, 4),
           ),
@@ -120,7 +120,7 @@ class _GamePageState extends State<GamePage> {
                       color: AppColors.titleBlue,
                       shadows: [
                         Shadow(
-                          color: AppColors.accent.withOpacity(0.8),
+                          color: AppColors.accent.withValues(alpha: 0.8),
                           offset: const Offset(0, 2),
                         ),
                       ],
@@ -140,7 +140,7 @@ class _GamePageState extends State<GamePage> {
               border: Border.all(color: AppColors.accent, width: 2),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primary.withOpacity(0.14),
+                    color: AppColors.primary.withValues(alpha: 0.14),
                   blurRadius: 8,
                   offset: const Offset(0, 3),
                 ),
@@ -168,7 +168,7 @@ class _GamePageState extends State<GamePage> {
                 border: Border.all(color: Colors.white, width: 2),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primary.withOpacity(0.24),
+                    color: AppColors.primary.withValues(alpha: 0.24),
                     blurRadius: 8,
                     offset: const Offset(0, 3),
                   ),

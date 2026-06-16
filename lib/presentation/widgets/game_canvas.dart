@@ -43,7 +43,7 @@ class _GameCanvasState extends State<GameCanvas> {
     final offsetX = (_canvasW / 2) - (size.width / 2);
     final offsetY = (_canvasH / 2) - (size.height / 2);
     _transformController.value = Matrix4.identity()
-      ..translate(-offsetX, -offsetY);
+      ..translateByDouble(-offsetX, -offsetY, 0, 1);
   }
 
   @override
@@ -91,7 +91,7 @@ class _GameCanvasState extends State<GameCanvas> {
                   width: constraints.maxWidth,
                   height: constraints.maxHeight,
                   color: isHovering
-                      ? AppColors.accent.withOpacity(0.16)
+                      ? AppColors.accent.withValues(alpha: 0.16)
                       : AppColors.canvasBackground,
                   child: ClipRect(
                     child: InteractiveViewer(
@@ -277,7 +277,7 @@ class _GridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.primary.withOpacity(0.09)
+      ..color = AppColors.primary.withValues(alpha: 0.09)
       ..strokeWidth = 1;
     const spacing = 40.0;
     for (double x = 0; x <= canvasW; x += spacing) {
